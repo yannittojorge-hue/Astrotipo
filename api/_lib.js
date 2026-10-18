@@ -16,7 +16,7 @@ export const BASE_URL = process.env.BASE_URL || "https://www.astrotipo.com.ar";
 //   n nombre · e email · t eneatipo · w ala · i instinto (sp/so/sx)
 //   u fecha y hora de nacimiento en UTC (minutos desde 1970) · h 1 si sabe la hora
 //   la, lo latitud y longitud · c ciudad (solo para mostrar)
-const INSTINTOS = { sp: "Autoconservación", so: "Social", sx: "Sexual (uno a uno)" };
+const INSTINTOS = { sp: "Autoconservación", so: "Social", sx: "Uno a uno" };
 
 export function decodificarToken(raw) {
   try {
@@ -122,17 +122,20 @@ ESTRUCTURA OBLIGATORIA (usá solo etiquetas HTML <h3>, <p>, <ul>, <li>, <strong>
 4. <h3>Tu instinto: ${instintoNombre}</h3>
    Cómo su instinto dominante cambia la forma en que se expresa su tipo, y qué planeta de su carta lo refuerza.
 5. <h3>Cómo pensás, amás y actuás</h3>
-   Mercurio, Venus y Marte: un párrafo para cada uno, siempre leído desde su eneatipo.
+   Mercurio, Venus y Marte: un párrafo de 4 o 5 oraciones para cada uno, siempre leído desde su eneatipo (por ejemplo, cómo un Tipo ${eneatipo} usa ese Mercurio para protegerse o para conseguir lo que busca).
 6. <h3>Tu sombra</h3>
-   Su mecanismo de defensa principal (nombralo), cómo reacciona bajo estrés (dirección de desintegración del eneagrama) y qué papel juega su Saturno.
+   Su mecanismo de defensa principal (nombralo y explicá cómo funciona con un ejemplo cotidiano), cómo reacciona bajo estrés (dirección de desintegración del eneagrama), qué señales le avisan que está entrando en ese modo y qué papel juega su Saturno. Dos o tres párrafos.
 7. <h3>Tu camino de crecimiento</h3>
-   Hacia dónde crece en su mejor versión (dirección de integración) y dónde su Júpiter le facilita ese crecimiento.
+   Hacia dónde crece en su mejor versión (dirección de integración), cómo se ve eso en situaciones concretas de su vida (trabajo, pareja, amistades) y dónde su Júpiter le facilita ese crecimiento. Dos o tres párrafos.
 8. <h3>Tus vínculos</h3>
-   Su eneatipo más compatible y por qué se complementan; con qué tipo suele tener más fricción y cómo manejarla; con qué elementos y signos fluye más según su Venus y su Luna.
+   Su eneatipo más compatible y por qué se complementan; con qué tipo suele tener más fricción y cómo manejarla; con qué elementos y signos fluye más según su Venus y su Luna; qué necesita de una pareja o de un amigo para sentirse bien, y qué suele hacer sin darse cuenta que aleja a los demás. Dos o tres párrafos.
 9. <h3>Prácticas para tu día a día</h3>
-   Una lista <ul> con 5 prácticas concretas y realizables, pensadas para la combinación de su tipo y su carta.
+   Una lista <ul> con 5 prácticas pensadas para la combinación de SU tipo y SU carta. Cada práctica empieza con su nombre en <strong>, y explica en 2 o 3 oraciones qué hacer, cuándo (en qué situación de su día o ante qué señal) y por qué le sirve a alguien con su combinación. Nada genérico como "meditá", "hacé ejercicio" o "llevá un diario" sin decir exactamente cómo y para qué en su caso.
+
+EXTENSIÓN: entre 1600 y 2000 palabras en total. Cada sección tiene que aportar algo que la persona no leería en una descripción genérica de su signo o de su tipo.
 
 FORMATO:
+- En el cuadro de Deseo fundamental y Miedo básico, no pongas dos puntos después del <strong>: el texto sigue directo.
 - En cada sección incluí una sola frase clave, breve y memorable, dentro de <blockquote>...</blockquote>.
 - No uses <h1>, <h2>, estilos en línea, emojis ni bloques de código.
 - Los planetas lentos (Urano, Neptuno, Plutón) los comparte con su generación: no les des peso personal.
@@ -166,7 +169,9 @@ function limpiarHtml(html) {
     .replace(/<(script|style|iframe)[\s\S]*?<\/\1>/gi, "")
     .replace(/<(?!\/?(h3|p|ul|li|strong|em|blockquote|div)\b)[^>]*>/gi, "")
     .replace(/<(h3|p|ul|li|strong|em|blockquote)\s[^>]*>/gi, "<$1>")
-    .replace(/<div(?![^>]*class="clave")[^>]*>/gi, "<div>");
+    .replace(/<div(?![^>]*class="clave")[^>]*>/gi, "<div>")
+    // En los cuadros de deseo y miedo, "<strong>Deseo fundamental</strong>: texto" → sin los dos puntos sueltos
+    .replace(/<div class="clave">[\s\S]*?<\/div>/g, b => b.replace(/<\/strong>\s*[:\-–—]\s*/g, "</strong>"));
 }
 
 // ─── Adelanto gratis con IA ──────────────────────────────────────────────────
