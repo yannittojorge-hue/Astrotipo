@@ -502,7 +502,7 @@ td .gen{font-size:.76rem;color:var(--muted)}
 /* ================= CONFIGURACIÓN ================= */
 // precio: solo lo que se muestra. El que se cobra está en api/_lib.js (PRECIO): cambiá los dos juntos.
 // ga4 y metaPixel: pegá los IDs cuando los tengas (vacíos = no se cargan).
-const CONFIG = { precio: 6000, ga4: "", metaPixel: "", contacto: "yannittojorge@gmail.com" };
+const CONFIG = { precio: 6000, ga4: "", metaPixel: "1108376231579501", contacto: "yannittojorge@gmail.com" };
 
 /* ================= ANALÍTICA ================= */
 if (CONFIG.ga4) {
@@ -816,7 +816,7 @@ function showResult(notice){
   const scs=$('rScores');scs.innerHTML='';(S.s||[]).slice().sort((a,b)=>b-a).forEach(v=>{const r=document.createElement('div');r.className='sc';r.innerHTML='<span class="muted">Tipo ?</span><span class="track"><i></i></span><span class="n"></span>';r.querySelector('i').style.width=v+'%';r.children[2].textContent=v;scs.appendChild(r);});
   $('priceTxt').textContent=money(CONFIG.precio);$('payErr').hidden=true;$('payBtn').disabled=false;$('payBtn').textContent='Desbloquear mi reporte';
   show('sResult');
-  if(once('view_paywall_'+S.u+S.t))ga('view_paywall');
+  if(once('view_paywall_'+S.u+S.t)){ga('view_paywall');fb('ViewContent',{content_name:'Reporte Astrotipo',value:CONFIG.precio,currency:'ARS'});}
 }
 $('payBtn').onclick=async()=>{const btn=$('payBtn'),err=$('payErr');err.hidden=true;btn.disabled=true;btn.textContent='Abriendo Mercado Pago…';
   ga('begin_checkout',{value:CONFIG.precio,currency:'ARS'});fb('InitiateCheckout',{value:CONFIG.precio,currency:'ARS',num_items:1});
