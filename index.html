@@ -724,8 +724,7 @@ document.querySelectorAll('[data-go="quiz"]').forEach(b=>b.onclick=()=>{qi=Math.
 /* ================= TEST ================= */
 function renderQ(){const q=QUIZ[qi];
   $('qCount').textContent=(qi+1)+' de '+QUIZ.length;$('qBar').style.width=(qi/QUIZ.length*100)+'%';
-  $('qSection').textContent=q.kind==='i'?'Parte 1 de 2 · Tu energía':'Parte 1 de 2 · Tus reacciones';
-  $('qHint').textContent=q.kind==='i'?'Esta pregunta mide hacia dónde va tu energía. Tiene 3 opciones porque hay 3 instintos.':'Elegí la reacción que más se parece a la tuya, aunque no sea exacta.';
+  
   $('qText').textContent=q.s;$('qBack').hidden=qi===0;
   const box=$('qOpts');box.innerHTML='';
   q.keys.forEach((k,i)=>{const b=document.createElement('button');b.type='button';b.className='opt'+(String(ans[qi])===String(k)?' sel':'');
