@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Astrotipo | Eneagrama y carta natal en un solo reporte</title>
-<meta name="description" content="Un test de Eneagrama de 40 situaciones y tu carta natal calculada con tu fecha, hora y lugar de nacimiento. Juntos explican cosas que por separado no alcanzan.">
+<meta name="description" content="Un test de Eneagrama de 31 situaciones y tu carta natal calculada con tu fecha, hora y lugar de nacimiento. Juntos explican cosas que por separado no alcanzan.">
 <meta property="og:title" content="Astrotipo | Eneagrama y carta natal">
 <meta property="og:description" content="Lo que el cielo marcó y lo que te mueve por dentro, en un solo mapa.">
 <meta property="og:type" content="website">
@@ -240,7 +240,7 @@ td .gen{font-size:.76rem;color:var(--muted)}
       <div class="hero-copy">
         <span class="label">Eneagrama · Carta natal</span>
         <h1>Lo que el cielo marcó y lo que te mueve por dentro, en un solo mapa.</h1>
-        <p class="lead">Un test de Eneagrama de 40 situaciones cotidianas y tu carta natal calculada con tu fecha, hora y lugar de nacimiento. Juntos explican cosas que por separado no alcanzan.</p>
+        <p class="lead">Un test de Eneagrama de 31 situaciones cotidianas y tu carta natal calculada con tu fecha, hora y lugar de nacimiento. Juntos explican cosas que por separado no alcanzan.</p>
         <div><button class="btn" type="button" data-go="quiz">Empezar el test</button></div>
         <div class="facts"><span>8 a 10 minutos</span><span>Desde el celular</span><span>Sin crear cuenta</span></div>
       </div>
@@ -298,7 +298,7 @@ td .gen{font-size:.76rem;color:var(--muted)}
   <section class="block"><div class="wrap">
     <div class="block-head"><span class="label">Cómo funciona</span><h2>Tres pasos</h2></div>
     <ol class="steps">
-      <li><h3>Respondés 40 situaciones</h3><p>Para cada una elegís la reacción que más se parece a la tuya.</p></li>
+      <li><h3>Respondés 31 situaciones</h3><p>Para cada una elegís la reacción que más se parece a la tuya.</p></li>
       <li><h3>Cargás tu nacimiento</h3><p>Fecha, lugar y, si la sabés, la hora. Con eso calculamos tu carta.</p></li>
       <li><h3>Ves tu cielo y tu adelanto</h3><p>El reporte completo se desbloquea después y también te llega por email.</p></li>
     </ol>
@@ -550,56 +550,37 @@ const CTRTXT={
 const PLMEAN={Sol:'Tu identidad y lo que querés irradiar',Luna:'Tus emociones y lo que necesitás para estar bien',Mercurio:'Cómo pensás, aprendés y te comunicás',Venus:'Cómo amás y qué valorás',Marte:'Cómo actuás, deseás y te enojás','Júpiter':'Dónde crecés y tenés suerte',Saturno:'Tus límites, deberes y lecciones',Urano:'Dónde rompés moldes',Neptuno:'Tus ideales y lo que te inspira','Plutón':'Dónde te transformás'};
 const INSTN={sp:'Autoconservación',so:'Social',sx:'Sexual (uno a uno)'};
 
-/* --- Test: 36 situaciones (cada tipo aparece 12 veces y cada par de tipos 3 veces) + 4 de instinto --- */
-const TRI=[
- {t:[1,2,3],q:[
-  ['Un compañero te pide ayuda con su trabajo justo cuando tenés el tuyo atrasado.',{1:'Lo ayudo, pero me molesta que no se haya organizado mejor: las cosas se hacen a tiempo.',2:'Lo ayudo igual. Me cuesta decir que no cuando alguien me necesita.',3:'Le doy una mano rápida y vuelvo a lo mío: tengo que cumplir con lo que prometí.'}],
-  ['Terminás un proyecto y te felicitan.',{1:'Agradezco, pero en mi cabeza aparecen los detalles que podrían haber salido mejor.',2:'Lo que más me llega es saber que le sirvió a alguien.',3:'Me encanta: siento que el esfuerzo se vio, y ya pienso en el próximo objetivo.'}],
-  ['Te toca organizar una juntada para un grupo de amigos.',{1:'Me ocupo de que todo esté bien hecho. Si algo sale desprolijo, me lo reprocho.',2:'Pienso en qué va a hacer sentir bien a cada uno y me encargo de los detalles personales.',3:'Quiero que salga impecable y que todos se vayan comentando lo bien que estuvo.'}]]},
- {t:[4,5,6],q:[
-  ['Te invitan a una fiesta donde no conocés a casi nadie.',{4:'Voy, pero me siento un poco afuera, como si los demás tuvieran algo que a mí me falta.',5:'Observo desde un costado y me voy cuando se me acaba la energía.',6:'Antes de ir averiguo quién va a estar, y una vez ahí me quedo cerca de alguien conocido.'}],
-  ['Recibís una crítica sobre algo que hiciste.',{4:'Me la tomo muy personal: siento que cuestionan quién soy.',5:'La analizo en frío para ver si tiene fundamento antes de reaccionar.',6:'Me quedo dando vueltas: ¿lo dijo por algo más? ¿Estoy en problemas?'}],
-  ['Tenés un fin de semana libre y sin planes.',{4:'Me dejo llevar por lo que siento: música, escribir, algo que me conecte conmigo.',5:'Me meto a fondo en un tema que me interesa, sin interrupciones.',6:'Resuelvo pendientes y dejo todo en orden para estar tranquilo la semana que viene.'}]]},
- {t:[7,8,9],q:[
-  ['Un plan que esperabas se cancela a último momento.',{7:'Enseguida pienso en otra cosa para hacer. No me quedo en el bajón.',8:'Me enoja y lo digo de frente: no me gusta que me dejen colgado.',9:'No pasa nada, me acomodo. Me quedo tranquilo en casa.'}],
-  ['En el trabajo hay que tomar una decisión difícil y nadie se anima.',{7:'Propongo varias alternativas creativas para que no sea tan pesado.',8:'Tomo el mando y decido. Alguien tiene que hacerlo.',9:'Escucho a todos y busco algo en lo que podamos estar de acuerdo.'}],
-  ['Alguien te pide que le cuentes algo doloroso de tu pasado.',{7:'Le busco el lado positivo o cambio de tema. No me gusta quedarme en lo triste.',8:'Lo cuento sin vueltas, pero no muestro cuánto me afectó.',9:'Le quito importancia. Ya pasó y no quiero revolver.'}]]},
- {t:[1,4,7],q:[
-  ['Te toca elegir a dónde ir de vacaciones.',{1:'Investigo bien y elijo lo que más conviene. Hacerlo bien importa.',4:'Busco un lugar con alma, distinto, que tenga algo especial para mí.',7:'Quiero ir a todos lados. Armo un plan con mil actividades.'}],
-  ['A la noche, antes de dormir, pensás en tu día.',{1:'Repaso lo que hice mal o lo que quedó pendiente.',4:'Me quedo con cómo me sentí y con lo que me falta para estar pleno.',7:'Pienso en lo que viene mañana y en las cosas lindas que tengo por delante.'}],
-  ['Te regalan algo que no te gusta.',{1:'Agradezco con educación, aunque me cuesta fingir: creo que hay que ser honesto.',4:'Me desilusiona un poco. Siento que no me conocen de verdad.',7:'Me río, lo cambio o le encuentro alguna gracia. No me hago drama.'}]]},
- {t:[2,5,8],q:[
-  ['Un amigo atraviesa un mal momento.',{2:'Estoy ahí todo el tiempo: le escribo, lo visito, le llevo algo.',5:'Lo escucho y le paso información o recursos que le puedan servir.',8:'Me pongo en modo protector. Si alguien lo lastimó, me encargo.'}],
-  ['Te piden que lideres un equipo nuevo.',{2:'Me enfoco en conocer a cada persona y en que se sienta acompañada.',5:'Primero estudio bien cómo funciona todo antes de dar una indicación.',8:'Acepto enseguida y dejo claro desde el principio cómo vamos a trabajar.'}],
-  ['Alguien invade tu espacio o tu tiempo sin preguntar.',{2:'Me molesta, pero lo dejo pasar para no quedar como egoísta.',5:'Me cierro y me alejo. Necesito recuperar mi espacio.',8:'Le pongo un límite claro en el momento.'}]]},
- {t:[3,6,9],q:[
-  ['Te ofrecen un ascenso con más responsabilidad.',{3:'Lo tomo. Es un paso más y quiero llegar lejos.',6:'Me genera dudas: ¿voy a poder?, ¿qué riesgos tiene? Lo consulto con gente de confianza.',9:'Me tienta, pero no quiero perder la tranquilidad que tengo.'}],
-  ['Hay un conflicto entre dos personas cercanas a vos.',{3:'Trato de que no afecte el clima ni lo que hay que hacer. Lo resuelvo rápido y sigo.',6:'Me preocupa de qué lado quedar y qué consecuencias va a tener.',9:'Me quedo en el medio y trato de calmar las aguas.'}],
-  ['Tenés que presentarte ante gente nueva.',{3:'Sé qué mostrar de mí para causar buena impresión.',6:'Me pongo alerta. Tardo en confiar hasta ver cómo es cada uno.',9:'Me adapto al grupo y dejo que los demás lleven la conversación.'}]]},
- {t:[1,5,9],q:[
-  ['Tenés que tomar una decisión importante sobre tu futuro.',{1:'Pienso en qué es lo correcto, aunque no sea lo más cómodo.',5:'Junto toda la información posible antes de decidir.',9:'La voy postergando. Me cuesta saber qué quiero realmente.'}],
-  ['Alguien rompe una regla que a vos te parece importante.',{1:'Me indigna. Me cuesta dejarlo pasar.',5:'Lo registro, pero no me involucro. No es asunto mío.',9:'No digo nada para no generar tensión.'}],
-  ['Te enojás con alguien.',{1:'Me lo guardo, pero se me nota en el tono o en lo exigente que me pongo.',5:'Me retiro a pensar y lo proceso solo.',9:'Me cuesta darme cuenta de que estoy enojado. Me desconecto.'}]]},
- {t:[2,6,7],q:[
-  ['Un amigo te cuenta un proyecto arriesgado.',{2:'Lo apoyo en todo lo que necesite. Quiero que sepa que cuenta conmigo.',6:'Le marco los riesgos para que no le salga mal.',7:'¡Me re copa! Ya le tiro ideas para hacerlo más grande.'}],
-  ['Estás pasando por un momento de mucho estrés.',{2:'Igual sigo pendiente de los demás. Me cuesta pedir ayuda.',6:'Me lleno de preocupaciones e imagino escenarios negativos.',7:'Me lleno de actividades y planes para no pensar.'}],
-  ['Tenés que comprometerte con algo a largo plazo.',{2:'Si alguien que quiero me necesita ahí, me comprometo sin dudarlo.',6:'Me comprometo cuando sé que es confiable, y después soy muy fiel.',7:'Me cuesta: siento que me puedo perder otras opciones mejores.'}]]},
- {t:[3,4,8],q:[
-  ['Algo te sale mal delante de otros.',{3:'Me afecta mucho la imagen. Enseguida busco cómo revertirlo.',4:'Me hundo un poco. Siento que confirma que algo en mí no está bien.',8:'Me lo banco y vuelvo con más fuerza. Nadie me va a ver débil.'}],
-  ['Elegís qué ponerte para un evento.',{3:'Algo que me haga ver bien y acorde al lugar.',4:'Algo que exprese quién soy, aunque nadie más se vista así.',8:'Lo que me resulte cómodo. No me importa mucho lo que piensen.'}],
-  ['Alguien te muestra su costado más vulnerable.',{3:'Lo acompaño, aunque a mí me cuesta mostrar mis fracasos.',4:'Me conecto profundamente. Siento que ahí aparece lo auténtico.',8:'Lo protejo, aunque yo rara vez me muestro así.'}]]},
- {t:[3,5,7],q:[
-  ['Te sobra una hora libre en el día.',{3:'La uso para adelantar algo. No me gusta perder el tiempo.',5:'Leo, investigo o pienso en algo que me interesa.',7:'Busco algo para disfrutar: salir, llamar a alguien, probar algo nuevo.'}],
-  ['Empezás a aprender algo nuevo.',{3:'Quiero dominarlo rápido para que se note el resultado.',5:'Quiero entenderlo a fondo, desde la base, antes de mostrarlo.',7:'Me entusiasma al principio y pruebo de todo, aunque después salte a otra cosa.'}],
-  ['Te sentís bajoneado.',{3:'Me pongo a hacer cosas. Lo productivo me ordena.',5:'Me aíslo hasta entender qué me pasa.',7:'Me distraigo con algo que me levante. No me gusta quedarme en lo negativo.'}]]},
- {t:[1,6,8],q:[
-  ['Un jefe toma una decisión injusta.',{1:'Me indigna porque está mal. Pienso en cómo debería haber sido.',6:'Me preocupa lo que significa para mí y para el equipo. Lo hablo con colegas.',8:'Lo confronto directamente. No me quedo callado.'}],
-  ['Tenés que confiar en alguien nuevo.',{1:'Confío si veo que actúa con coherencia y seriedad.',6:'Me cuesta. Lo pongo a prueba hasta estar seguro.',8:'Confío, pero si me traiciona no hay vuelta atrás.'}],
-  ['Algo sale mal en un trabajo en grupo.',{1:'Me cuesta no corregir todo yo. Siento que tendría que haber estado más atento.',6:'Busco quién tiene la información y armo un plan B.',8:'Tomo el control de la situación y la resuelvo.'}]]},
- {t:[2,4,9],q:[
-  ['Alguien que querés se olvida de tu cumpleaños.',{2:'Me duele, porque yo siempre estoy en esas cosas para los demás.',4:'Me siento invisible, como si no fuera importante para nadie.',9:'No le doy mucha importancia. No quiero hacer un problema.'}],
-  ['Tu pareja o un amigo te pide más espacio.',{2:'Me pregunto qué hice mal y busco cómo hacerlo sentir mejor.',4:'Lo vivo como un rechazo y me quedo con esa sensación mucho tiempo.',9:'Le doy el espacio sin problema. No quiero presionar.'}],
-  ['Pensás en lo que querés para tu vida.',{2:'Que la gente que quiero esté bien y me tenga cerca.',4:'Encontrar algo con sentido profundo, que sea realmente mío.',9:'Estar en paz, sin conflictos, con una vida tranquila.'}]]}
+/* --- Test: 27 situaciones con 5 reacciones cada una + 4 de instinto ---
+   Cada tipo aparece en 15 situaciones y cada par de tipos se cruza 7 u 8 veces,
+   así ningún tipo tiene ventaja por aparecer más. */
+const SIT=[
+ ['Recibís una crítica sobre algo que hiciste.',{1:'Me molesta, sobre todo si tiene razón: tendría que haberlo hecho mejor.',3:'Pienso rápido cómo corregirlo para que no afecte cómo me ven.',4:'Me la tomo personal: siento que cuestionan quién soy.',5:'La analizo en frío para ver si tiene fundamento.',6:'Me quedo dando vueltas: ¿habrá algo más detrás?'}],
+ ['Un compañero te pide ayuda justo cuando tenés tu trabajo atrasado.',{1:'Lo ayudo, pero me molesta que no se haya organizado mejor.',2:'Lo ayudo igual. Me cuesta decir que no cuando alguien me necesita.',5:'Le paso lo justo que necesita y vuelvo a lo mío.',6:'Lo ayudo, pero me preocupa quedar mal con lo mío.',9:'Le digo que sí sin pensarlo mucho y después me reorganizo.'}],
+ ['Un plan que esperabas se cancela a último momento.',{1:'Me molesta la falta de seriedad: las cosas se avisan con tiempo.',4:'Me bajoneo más de lo que debería. Lo había imaginado distinto.',7:'Enseguida armo otro plan. No me quedo en el bajón.',8:'Lo digo de frente: no me gusta que me dejen colgado.',9:'No pasa nada, me acomodo. Me quedo tranquilo en casa.'}],
+ ['Te toca elegir a dónde ir de vacaciones.',{1:'Investigo bien y elijo lo que más conviene. Hacerlo bien importa.',3:'Un lugar que valga la pena, aprovechando cada día al máximo.',4:'Un lugar con alma, distinto, que tenga algo especial para mí.',6:'Algo conocido o bien recomendado, con todo reservado de antemano.',7:'Quiero ir a todos lados. Armo un plan con mil actividades.'}],
+ ['En el trabajo hay que tomar una decisión difícil y nadie se anima.',{3:'Propongo un camino claro y me pongo al frente para que salga.',5:'Pido tiempo para analizar bien la información antes de opinar.',7:'Tiro varias alternativas para destrabar y que no sea tan pesado.',8:'Decido yo. Alguien tiene que hacerlo.',9:'Escucho a todos y busco algo en lo que podamos estar de acuerdo.'}],
+ ['Terminás un proyecto y te felicitan.',{2:'Lo que más me llega es saber que le sirvió a alguien.',3:'Me encanta que se note el esfuerzo. Ya pienso en el próximo objetivo.',4:'Me alegra si sienten que tiene algo mío, algo único.',6:'Agradezco, pero me quedo pensando si de verdad salió tan bien.',9:'Me incomoda un poco ser el centro. Le resto importancia.'}],
+ ['Te invitan a una fiesta donde no conocés a casi nadie.',{4:'Voy, pero me siento un poco afuera, como si a mí me faltara algo.',5:'Observo desde un costado y me voy cuando se me acaba la energía.',6:'Averiguo antes quién va y me quedo cerca de alguien conocido.',8:'Llego, me presento y en un rato estoy en el centro de la ronda.',9:'Me sumo a la charla que haya y me dejo llevar.'}],
+ ['Alguien que querés se olvida de tu cumpleaños.',{1:'Me molesta. Yo no me olvidaría, y siento que no es correcto.',2:'Me duele, porque yo siempre estoy en esas cosas para los demás.',3:'Hago como que no me importa y sigo con lo mío.',4:'Me siento invisible, como si no fuera importante para nadie.',9:'No le doy importancia. No quiero hacer un problema.'}],
+ ['Un jefe toma una decisión que te parece injusta.',{1:'Me indigna porque está mal. Pienso en cómo debería haber sido.',2:'Me preocupa más cómo afecta a mis compañeros que a mí.',6:'Lo hablo con colegas de confianza antes de hacer nada.',8:'Lo confronto directamente. No me quedo callado.',9:'Me molesta, pero lo dejo pasar para no generar tensión.'}],
+ ['Un amigo te cuenta un proyecto arriesgado.',{2:'Lo apoyo en todo lo que necesite. Quiero que sepa que cuenta conmigo.',3:'Le pregunto por los números y le digo cómo lo haría rendir.',6:'Le marco los riesgos para que no le salga mal.',7:'¡Me re copa! Ya le tiro ideas para hacerlo más grande.',8:'Le digo sin vueltas lo que pienso, aunque no le guste.'}],
+ ['Empezás a aprender algo nuevo.',{1:'Quiero aprenderlo bien, con método, sin saltear pasos.',3:'Quiero dominarlo rápido para que se note el resultado.',5:'Quiero entenderlo a fondo, desde la base, antes de mostrarlo.',7:'Me entusiasma y pruebo de todo, aunque después salte a otra cosa.',8:'Me tiro de cabeza y aprendo sobre la marcha.'}],
+ ['Algo te sale mal delante de otros.',{3:'Me afecta la imagen. Enseguida busco cómo revertirlo.',4:'Me hundo un poco. Siento que confirma que algo en mí no está bien.',5:'Me retiro a entender qué falló antes de volver a exponerme.',7:'Lo tomo con humor y paso a otra cosa.',8:'Me lo banco y vuelvo con más fuerza. Nadie me va a ver débil.'}],
+ ['Te toca organizar una juntada con amigos.',{1:'Me ocupo de que todo esté bien hecho. Si algo sale desprolijo, me lo reprocho.',2:'Pienso en qué va a hacer sentir bien a cada uno.',3:'Quiero que salga impecable y que todos comenten lo bien que estuvo.',7:'Sumo planes, música y juegos: que sea una fiesta.',9:'Prefiero algo simple, que cada uno traiga algo y que fluya.'}],
+ ['Alguien invade tu espacio o tu tiempo sin preguntar.',{1:'Me molesta, pero me lo guardo. Igual se me nota en el tono.',2:'Lo dejo pasar para no quedar como egoísta.',5:'Me cierro y me alejo. Necesito recuperar mi espacio.',6:'Me pregunto si hice algo para que pase o si me está probando.',8:'Le pongo un límite claro en el momento.'}],
+ ['Tu pareja o un amigo te pide más espacio.',{2:'Me pregunto qué hice mal y busco cómo hacerlo sentir mejor.',4:'Lo vivo como un rechazo y me quedo con esa sensación mucho tiempo.',7:'Lo acepto y aprovecho para hacer mis cosas y ver gente.',8:'Le pido que me diga de frente qué pasa.',9:'Le doy el espacio sin problema. No quiero presionar.'}],
+ ['Pensás en lo que querés para tu vida.',{2:'Que la gente que quiero esté bien y me tenga cerca.',3:'Llegar lejos en lo que hago y que se note.',4:'Encontrar algo con sentido profundo, que sea realmente mío.',5:'Entender bien cómo funcionan las cosas y tener mi independencia.',9:'Estar en paz, sin conflictos, con una vida tranquila.'}],
+ ['Un amigo atraviesa un mal momento.',{2:'Estoy ahí todo el tiempo: le escribo, lo visito, le llevo algo.',5:'Lo escucho y le paso información o recursos que le sirvan.',7:'Lo saco a pasear para que se despeje y vea el lado bueno.',8:'Me pongo en modo protector. Si alguien lo lastimó, me encargo.',9:'Lo acompaño en silencio, sin presionarlo.'}],
+ ['Elegís qué ponerte para un evento importante.',{1:'Algo correcto y prolijo, acorde a la ocasión.',2:'Algo que les guste a los que van a estar.',3:'Algo que me haga ver bien y deje buena impresión.',4:'Algo que exprese quién soy, aunque nadie más se vista así.',8:'Lo que me resulte cómodo. No me importa mucho lo que piensen.'}],
+ ['A la noche, antes de dormir, pensás en tu día.',{1:'Repaso lo que hice mal o lo que quedó pendiente.',3:'Pienso si avancé con mis objetivos.',6:'Pienso en lo que puede salir mal mañana y cómo prepararme.',7:'Pienso en las cosas lindas que tengo por delante.',9:'No pienso mucho. Me duermo con la tele o el celular.'}],
+ ['Estás pasando por un momento de mucho estrés.',{2:'Igual sigo pendiente de los demás. Me cuesta pedir ayuda.',4:'Me encierro en lo que siento y siento que nadie me entiende.',5:'Me aíslo y reduzco todo al mínimo hasta recuperar energía.',6:'Me lleno de preocupaciones e imagino escenarios negativos.',7:'Me lleno de actividades y planes para no pensar.'}],
+ ['Te ofrecen un ascenso con mucha más responsabilidad.',{3:'Lo tomo. Es un paso más y quiero llegar lejos.',5:'Antes quiero saber exactamente qué implica y cuánto tiempo me va a quitar.',6:'Me genera dudas. Lo consulto con gente de confianza.',7:'Me entusiasma lo nuevo, aunque me da miedo quedar atado.',9:'Me tienta, pero no quiero perder la tranquilidad que tengo.'}],
+ ['Te piden que lideres un equipo nuevo.',{2:'Me enfoco en conocer a cada persona y en que se sienta acompañada.',3:'Defino metas claras y quiero que el equipo se luzca.',5:'Primero estudio cómo funciona todo antes de dar una indicación.',6:'Busco el respaldo de quien me lo pidió y armo reglas claras.',8:'Acepto enseguida y dejo claro desde el principio cómo vamos a trabajar.'}],
+ ['Te sobra una hora libre en el día.',{1:'La uso para ordenar o terminar algo pendiente.',2:'Llamo o le escribo a alguien que necesitaba algo.',4:'Escucho música o escribo algo que me conecte conmigo.',5:'Leo o investigo sobre algo que me interesa.',7:'Busco algo para disfrutar: salir o probar algo nuevo.'}],
+ ['Tenés que confiar en alguien nuevo.',{1:'Confío si veo que actúa con coherencia y seriedad.',3:'Confío si veo que es capaz y cumple con lo que promete.',4:'Confío si siento una conexión real, más allá de lo superficial.',6:'Me cuesta. Lo pongo a prueba hasta estar seguro.',8:'Confío, pero si me traiciona no hay vuelta atrás.'}],
+ ['Te enojás con alguien.',{1:'Me lo guardo, pero se me nota en el tono o en lo exigente que me pongo.',4:'Me quedo rumiando lo que sentí y le doy mil vueltas.',5:'Me retiro a pensar y lo proceso solo.',8:'Lo digo en el momento, sin filtro.',9:'Me cuesta darme cuenta de que estoy enojado. Me desconecto.'}],
+ ['Alguien te muestra su costado más vulnerable.',{2:'Me vuelco a cuidarlo. Me sale naturalmente.',4:'Me conecto profundamente. Siento que ahí aparece lo auténtico.',6:'Me genera confianza y me abro un poco más yo también.',7:'Lo escucho, pero enseguida busco levantarle el ánimo.',8:'Lo protejo, aunque yo rara vez me muestro así.'}],
+ ['Alguien rompe una regla que a vos te parece importante.',{1:'Me indigna. Me cuesta dejarlo pasar.',5:'Lo registro, pero no me involucro. No es asunto mío.',6:'Me pregunto si habrá consecuencias y si alguien va a hacer algo.',7:'Si no hace daño, no me hago problema. Las reglas a veces sobran.',9:'No digo nada para no generar tensión.'}]
 ];
 const INSTQ=[
  ['Cuando empezás algo nuevo, ¿qué es lo primero que te preocupa?',{sp:'Tener lo necesario: plata, tiempo, salud, un lugar seguro.',so:'Mi lugar en el grupo y cómo me van a ver los demás.',sx:'Que haya química, algo o alguien que me apasione de verdad.'}],
@@ -608,8 +589,7 @@ const INSTQ=[
  ['¿En qué ponés más energía sin darte cuenta?',{sp:'En organizar mi vida práctica: finanzas, salud, comodidad.',so:'En mis contactos, mis grupos y las causas que me importan.',sx:'En las personas o pasiones que me atrapan.'}]
 ];
 const QUIZ=[];
-{const typeQs=[];for(let r=0;r<3;r++)for(let t=0;t<12;t++)typeQs.push({kind:'t',s:TRI[t].q[r][0],o:TRI[t].q[r][1],tri:TRI[t].t});
- let ii=0;for(let i=0;i<typeQs.length;i++){QUIZ.push(typeQs[i]);if((QUIZ.length%10)===9&&ii<4){QUIZ.push({kind:'i',s:INSTQ[ii][0],o:INSTQ[ii][1]});ii++;}}
+{let ii=0;SIT.forEach((x,n)=>{QUIZ.push({kind:'t',s:x[0],o:x[1],tri:Object.keys(x[1]).map(Number)});if(n%7===6&&ii<3){QUIZ.push({kind:'i',s:INSTQ[ii][0],o:INSTQ[ii][1]});ii++;}});
  while(ii<4){QUIZ.push({kind:'i',s:INSTQ[ii][0],o:INSTQ[ii][1]});ii++;}}
 function rng(seed){return function(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};}
 QUIZ.forEach((q,i)=>{const keys=Object.keys(q.o);const r=rng(i*97+13);for(let k=keys.length-1;k>0;k--){const j=Math.floor(r()*(k+1));[keys[k],keys[j]]=[keys[j],keys[k]];}q.keys=keys;});
@@ -652,14 +632,14 @@ function chart({u,conHora,la,lo}){
 
 /* ================= PUNTAJE ================= */
 function score(ans){
-  const c={1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0},head={},inst={sp:0,so:0,sx:0};let lastInst=null;
+  const c={1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0},head={},last={},inst={sp:0,so:0,sx:0};let lastInst=null;
   QUIZ.forEach((q,i)=>{const a=ans[i];if(a==null)return;
-    if(q.kind==='t'){c[a]++;q.tri.forEach(o=>{if(o!=a){const k=a+'>'+o;head[k]=(head[k]||0)+1;}});}
+    if(q.kind==='t'){c[a]++;last[a]=i;q.tri.forEach(o=>{if(o!=a){const k=a+'>'+o;head[k]=(head[k]||0)+1;}});}
     else{inst[a]++;lastInst=a;}});
-  const order=Object.keys(c).map(Number).sort((x,y)=>{if(c[y]!==c[x])return c[y]-c[x];return (head[y+'>'+x]||0)-(head[x+'>'+y]||0);});
-  const t=order[0];const L=t===1?9:t-1,R=t===9?1:t+1;const wing=c[L]>c[R]?L:c[R]>c[L]?R:((head[L+'>'+R]||0)>=(head[R+'>'+L]||0)?L:R);
+  const order=Object.keys(c).map(Number).sort((x,y)=>{if(c[y]!==c[x])return c[y]-c[x];const h=(head[y+'>'+x]||0)-(head[x+'>'+y]||0);if(h)return h;return (last[y]??-1)-(last[x]??-1);});
+  const t=order[0];const L=t===1?9:t-1,R=t===9?1:t+1;const wing=c[L]>c[R]?L:c[R]>c[L]?R:((head[L+'>'+R]||0)!==(head[R+'>'+L]||0)?((head[L+'>'+R]||0)>(head[R+'>'+L]||0)?L:R):((last[L]??-1)>=(last[R]??-1)?L:R));
   const im=Math.max(inst.sp,inst.so,inst.sx);const tied=['sp','so','sx'].filter(k=>inst[k]===im);const instinct=tied.length===1?tied[0]:(tied.includes(lastInst)?lastInst:tied[0]);
-  return {t,w:wing,i:instinct,s:[1,2,3,4,5,6,7,8,9].map(k=>Math.round(c[k]/12*100))};
+  return {t,w:wing,i:instinct,s:[1,2,3,4,5,6,7,8,9].map(k=>Math.round(c[k]/15*100))};
 }
 
 /* ================= RUEDA ================= */
@@ -748,7 +728,7 @@ function renderQ(){const q=QUIZ[qi];
   $('qText').textContent=q.s;$('qBack').hidden=qi===0;
   const box=$('qOpts');box.innerHTML='';
   q.keys.forEach((k,i)=>{const b=document.createElement('button');b.type='button';b.className='opt'+(String(ans[qi])===String(k)?' sel':'');
-    b.innerHTML='<span class="k">'+'ABC'[i]+'</span><span></span>';b.lastChild.textContent=q.o[k];
+    b.innerHTML='<span class="k">'+'ABCDE'[i]+'</span><span></span>';b.lastChild.textContent=q.o[k];
     b.onclick=()=>{ans[qi]=q.kind==='t'?Number(k):k;b.classList.add('sel');box.querySelectorAll('button').forEach(x=>x.disabled=true);
       setTimeout(()=>{if(qi<QUIZ.length-1){qi++;renderQ();window.scrollTo(0,0);}else{$('qBar').style.width='100%';Object.assign(S,score(ans));save();ga('quiz_done');show('sBirth');}},180);};
     box.appendChild(b);});}
