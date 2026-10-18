@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Astrotipo | Eneagrama y carta natal en un solo reporte</title>
+<meta name="description" content="Un test de Eneagrama de 40 situaciones y tu carta natal calculada con tu fecha, hora y lugar de nacimiento. Juntos explican cosas que por separado no alcanzan.">
+<meta property="og:title" content="Astrotipo | Eneagrama y carta natal">
+<meta property="og:description" content="Lo que el cielo marcó y lo que te mueve por dentro, en un solo mapa.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.astrotipo.com.ar/">
+<meta name="theme-color" content="#14213D">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Symbols:wght@400&display=swap">
+<style>
+/* Layout: almanaque de una columna; texto a la izquierda, la rueda (zodíaco + eneagrama) como único gesto fuerte */
+:root{
+  --paper:#EDF0F4; --surface:#F8F9FB; --ink:#14213D; --muted:#566079; --line:#C8CFDB; --accent:#B23A2C; --accent-ink:#FFFFFF; --soft:#E2E7EF;
+  --f-display:"DM Serif Display",Georgia,serif;
+  --f-body:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-sym:"Noto Sans Symbols","Segoe UI Symbol","Apple Symbols",sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root{--paper:#0B1120;--surface:#121A2D;--ink:#E5E9F1;--muted:#97A1B6;--line:#28324B;--accent:#E3604E;--accent-ink:#1A0E0C;--soft:#18213A;color-scheme:dark}}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+img{max-width:100%}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.narrow{max-width:680px}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(2.1rem,5.6vw,3.4rem)}
+h2{font-size:clamp(1.7rem,4vw,2.3rem)}
+h3{font-size:1.35rem}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.label{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.sym{font-family:var(--f-sym)}
+.muted{color:var(--muted)}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.linkbtn{background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;color:var(--accent);font-weight:500}
+
+header.site .wrap{display:flex;align-items:center;justify-content:space-between;padding-block:18px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-size:1.35rem;cursor:pointer;background:none;border:0;padding:0}
+.brand svg{width:28px;height:28px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:15px 28px;font-weight:600;font-size:1rem;cursor:pointer;letter-spacing:.01em;transition:transform .15s ease,filter .15s ease}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:scale(.98)}
+.btn[disabled]{opacity:.5;cursor:wait}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding-block:24px 56px}
+.hero-copy{display:flex;flex-direction:column;gap:22px;min-width:0}
+.hero-copy .lead{font-size:1.12rem;color:var(--muted);max-width:34em}
+.facts{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.88rem;color:var(--muted)}
+.facts span{display:inline-flex;gap:6px;align-items:center}
+.facts span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.hero-wheel{display:flex;flex-direction:column;gap:10px;align-items:center;min-width:0}
+.wheel{width:100%;aspect-ratio:1;max-width:min(440px,100%)}
+.wheel-cap{font-size:.78rem;text-align:center}
+@media (max-width:760px){.hero{grid-template-columns:1fr;gap:24px;padding-block:8px 40px}.hero-wheel{order:-1}.hero .wheel{max-width:300px}}
+
+section.block{padding-block:56px;border-top:1px solid var(--line)}
+.block-head{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;max-width:640px}
+.two{display:grid;grid-template-columns:1fr auto 1fr;gap:28px;align-items:stretch}
+.two .col{display:flex;flex-direction:column;gap:10px;min-width:0}
+.two .col p{color:var(--muted)}
+.two .x{font-family:var(--f-display);font-size:2.4rem;color:var(--accent);align-self:center}
+.cross{margin-top:28px;padding:22px 24px;background:var(--surface);border-left:2px solid var(--accent);max-width:680px}
+.cross p{font-family:var(--f-display);font-size:1.25rem;line-height:1.45;font-style:italic}
+@media (max-width:760px){.two{grid-template-columns:1fr}.two .x{justify-self:start;font-size:1.8rem}}
+.includes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;padding:0;margin:0}
+.includes li{list-style:none;padding:16px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.includes li b{font-weight:600}
+.includes li span{color:var(--muted);font-size:.94rem}
+@media (max-width:760px){.includes{grid-template-columns:1fr}}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;padding:0;margin:0;counter-reset:s}
+.steps li{list-style:none;display:flex;flex-direction:column;gap:8px;counter-increment:s}
+.steps li::before{content:counter(s);font-family:var(--f-display);font-size:2.2rem;color:var(--accent);line-height:1}
+.steps li p{color:var(--muted);font-size:.95rem}
+@media (max-width:760px){.steps{grid-template-columns:1fr;gap:22px}}
+.sample{max-width:680px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px}
+.sample .fade{position:relative;max-height:220px;overflow:hidden}
+.sample .fade::after{content:"";position:absolute;inset:auto 0 0 0;height:110px;background:linear-gradient(to bottom,transparent,var(--surface))}
+.sample p+p{margin-top:12px}
+.datarow{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.82rem;color:var(--muted);margin-bottom:16px;font-variant-numeric:tabular-nums}
+.faq{max-width:720px;display:flex;flex-direction:column}
+.faq details{border-bottom:1px solid var(--line);padding:16px 0}
+.faq summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--accent)}
+.faq details[open] summary::after{content:"–"}
+.faq details p{margin-top:10px;color:var(--muted)}
+.final{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+footer{padding-block:32px 48px;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted)}
+footer .wrap{display:flex;flex-direction:column;gap:6px}
+
+/* TEST */
+.screen{padding-block:20px 64px}
+.qtop{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:10px}
+.bar{height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:34px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s ease}
+.qcard{display:flex;flex-direction:column;gap:22px}
+.qcard h2{font-size:clamp(1.45rem,4.2vw,1.95rem)}
+.qhint{font-size:.9rem;color:var(--muted)}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;gap:14px;align-items:flex-start;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;cursor:pointer;font-size:1rem;line-height:1.45;transition:border-color .15s ease,background .15s ease}
+.opt:hover{border-color:var(--ink)}
+.opt .k{font-size:.78rem;color:var(--muted);padding-top:3px;min-width:14px;font-weight:600}
+.opt.sel{border-color:var(--accent);background:var(--soft)}
+.qnav{display:flex;justify-content:space-between;margin-top:22px}
+
+/* FORMULARIOS */
+.form{display:flex;flex-direction:column;gap:22px}
+.field{display:flex;flex-direction:column;gap:8px;min-width:0}
+.field label,.field .flabel{font-weight:600;font-size:.95rem}
+.row3{display:grid;grid-template-columns:1fr 1.4fr 1.1fr;gap:10px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:260px}
+select,input[type=text],input[type=email]{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;min-width:0}
+select:disabled{opacity:.45}
+.check{display:flex;gap:10px;align-items:center;font-size:.94rem;color:var(--muted);cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.help{font-size:.86rem;color:var(--muted)}
+.sugg{list-style:none;margin:6px 0 0;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--surface);overflow:hidden}
+.sugg li{padding:11px 12px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line)}
+.sugg li:last-child{border-bottom:0}
+.sugg li:hover,.sugg li.on{background:var(--soft)}
+.sugg small{color:var(--muted);font-size:.74rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+.sugg .empty{cursor:default;color:var(--muted);font-size:.9rem}
+.chosen{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.err{color:var(--accent);font-size:.9rem}
+
+/* CARGANDO */
+.loading{display:flex;flex-direction:column;align-items:center;gap:26px;padding-block:40px 80px;text-align:center}
+.loading svg{width:200px;height:200px}
+.loading .draw{stroke-dasharray:1200;stroke-dashoffset:1200;animation:draw 2.6s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.ticks{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;text-align:left}
+.ticks li{color:var(--muted);font-size:.95rem;display:flex;gap:10px;opacity:.35;transition:opacity .3s}
+.ticks li.done{opacity:1;color:var(--ink)}
+.ticks li::before{content:"·";color:var(--accent);width:12px}
+.ticks li.done::before{content:"✓"}
+
+/* ADELANTO */
+.res-head{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.notice{background:var(--surface);border:1px solid var(--line);border-left:2px solid var(--accent);border-radius:var(--r);padding:14px 16px;font-size:.94rem}
+.sky3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sky3 > div{padding:18px 14px 18px 0;display:flex;flex-direction:column;gap:4px;min-width:0}
+.sky3 > div + div{padding-left:16px;border-left:1px solid var(--line)}
+.sky3 .sg{font-family:var(--f-display);font-size:1.55rem;line-height:1.1;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.sky3 .sg .sym{font-size:1.1rem;color:var(--accent)}
+.sky3 .deg{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+@media (max-width:520px){.sky3{grid-template-columns:1fr}.sky3 > div + div{padding-left:0;border-left:0;border-top:1px solid var(--line)}.sky3 > div{padding:14px 0}}
+.elems{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.el{display:grid;grid-template-columns:70px 1fr 44px;gap:12px;align-items:center;font-size:.9rem}
+.track{height:8px;background:var(--soft);border-radius:4px;overflow:hidden}
+.track i{display:block;height:100%;background:var(--ink);border-radius:4px}
+.el.top .track i{background:var(--accent)}
+.el .pct{font-size:.82rem;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.preview-text{font-family:var(--f-display);font-size:1.22rem;line-height:1.55;max-width:36em;min-height:5em}
+.preview-text.wait{color:var(--muted)}
+.locks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.lock{border:1px dashed var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.lock .v{font-family:var(--f-display);font-size:1.4rem}
+.lock .v span{filter:blur(6px);user-select:none}
+.lock .k{font-size:.75rem;color:var(--accent);font-weight:600}
+@media (max-width:520px){.locks{grid-template-columns:1fr}}
+.scores{display:flex;flex-direction:column;gap:8px;max-width:520px}
+.sc{display:grid;grid-template-columns:62px 1fr 34px;gap:10px;align-items:center;font-size:.85rem}
+.sc .track{height:6px}
+.sc .track i{background:var(--muted)}
+.sc:first-child .track i{background:var(--accent)}
+.sc .n{font-size:.8rem;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.ilist{counter-reset:i;padding:0;margin:0;display:flex;flex-direction:column}
+.ilist li{list-style:none;padding:12px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:30px 1fr;gap:4px}
+.ilist li::before{counter-increment:i;content:counter(i,decimal-leading-zero);font-size:.8rem;color:var(--accent);padding-top:3px;font-weight:600}
+.ilist li span{color:var(--muted);font-size:.92rem;grid-column:2}
+.rsec{display:flex;flex-direction:column;gap:16px;padding-block:34px;border-top:1px solid var(--line)}
+.rsec.first{border-top:0}
+.paybar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:20;box-shadow:0 -8px 30px rgba(10,16,32,.12)}
+.paybar .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-block:12px}
+.price{display:flex;flex-direction:column;line-height:1.25}
+.price b{font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums}
+.price small{font-size:.74rem;color:var(--muted)}
+.payerr{padding-bottom:10px;font-size:.88rem}
+.spacer{height:120px}
+
+/* REPORTE */
+.cover{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:center;padding-block:10px 32px}
+.cover .meta{display:flex;flex-direction:column;gap:14px;min-width:0}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.86rem;background:var(--surface)}
+.badge.on{border-color:var(--accent);color:var(--accent)}
+@media (max-width:760px){.cover{grid-template-columns:1fr}.cover .wheel{max-width:340px;justify-self:center}}
+.ai{max-width:42em;counter-reset:sec}
+.ai h3{font-size:1.65rem;margin:40px 0 14px;padding-top:28px;border-top:1px solid var(--line);counter-increment:sec;display:flex;gap:12px;align-items:baseline}
+.ai h3::before{content:counter(sec,decimal-leading-zero);font-family:var(--f-body);font-size:.8rem;color:var(--accent);font-weight:600}
+.ai h3:first-child{margin-top:0}
+.ai p{font-size:1.04rem;margin:0 0 14px}
+.ai ul{margin:0 0 14px;padding-left:20px}
+.ai li{margin:0 0 8px}
+.ai blockquote{margin:20px 0;padding:2px 0 2px 16px;border-left:2px solid var(--accent);font-family:var(--f-display);font-style:italic;font-size:1.3rem;line-height:1.45}
+.ai .clave{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 16px}
+.ai .clave p{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin:0;font-size:.96rem;color:var(--muted)}
+.ai .clave strong{display:block;color:var(--accent);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+@media (max-width:620px){.ai .clave{grid-template-columns:1fr}}
+.tblwrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+@media (max-width:520px){table{font-size:.84rem}th,td{padding-right:8px}}
+th,td{text-align:left;padding:10px 10px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td.pos{white-space:nowrap;font-variant-numeric:tabular-nums}
+td .gen{font-size:.76rem;color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding-block:28px}
+
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}.loading .draw{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+
+<header class="site"><div class="wrap">
+  <button class="brand" id="homeBtn" type="button" aria-label="Volver al inicio">
+    <svg viewBox="-50 -50 100 100" aria-hidden="true" id="miniLogo"></svg>
+    Astrotipo
+  </button>
+</div></header>
+
+<!-- ============ INICIO ============ -->
+<main id="sLanding">
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-copy">
+        <span class="label">Eneagrama · Carta natal</span>
+        <h1>Lo que el cielo marcó y lo que te mueve por dentro, en un solo mapa.</h1>
+        <p class="lead">Un test de Eneagrama de 40 situaciones cotidianas y tu carta natal calculada con tu fecha, hora y lugar de nacimiento. Juntos explican cosas que por separado no alcanzan.</p>
+        <div><button class="btn" type="button" data-go="quiz">Empezar el test</button></div>
+        <div class="facts"><span>8 a 10 minutos</span><span>Desde el celular</span><span>Sin crear cuenta</span></div>
+      </div>
+      <div class="hero-wheel">
+        <svg class="wheel" id="heroWheel" viewBox="-185 -185 370 370" role="img" aria-label="Rueda zodiacal con el cielo de hoy y el símbolo del Eneagrama en el centro"></svg>
+        <span class="wheel-cap muted" id="heroCap"></span>
+      </div>
+    </div>
+  </div>
+
+  <section class="block"><div class="wrap">
+    <div class="block-head">
+      <span class="label">Por qué los dos</span>
+      <h2>Uno explica cómo sos. El otro, por qué.</h2>
+    </div>
+    <div class="two">
+      <div class="col"><h3>Tu carta natal</h3><p>Muestra tu temperamento: cómo sentís, cómo te mostrás, a qué ritmo hacés las cosas. Sale de la posición exacta del Sol, la Luna y los planetas en el momento y el lugar en que naciste.</p></div>
+      <div class="x" aria-hidden="true">×</div>
+      <div class="col"><h3>Tu eneatipo</h3><p>Muestra tu motivación de fondo: lo que buscás sin darte cuenta y lo que más temés perder. Sale de cómo reaccionás en situaciones concretas, no de tu fecha.</p></div>
+    </div>
+    <div class="cross"><p>Una Luna en Aries reacciona rápido. Pero no es lo mismo si esa reacción protege tu seguridad, tu imagen o tu libertad. Eso lo dice el eneatipo.</p></div>
+  </div></section>
+
+  <section class="block"><div class="wrap">
+    <div class="block-head">
+      <span class="label">Tu reporte</span>
+      <h2>Lo que vas a recibir</h2>
+      <p class="muted">Al terminar ves tu cielo y un adelanto. El reporte completo se desbloquea después.</p>
+    </div>
+    <ul class="includes">
+      <li><b>Tu eneatipo, tu ala y tu instinto</b><span>Con tu puntaje en los 9 tipos.</span></li>
+      <li><b>Tus tres pilares: Sol, Luna y Ascendente</b><span>Calculados al grado con tu lugar y hora de nacimiento.</span></li>
+      <li><b>Dónde se cruzan</b><span>Cómo tu carta cambia la forma en que se expresa tu eneatipo.</span></li>
+      <li><b>Todos tus planetas</b><span>Mercurio, Venus, Marte y el resto, signo por signo.</span></li>
+      <li><b>Tu sombra y tu camino de crecimiento</b><span>Cómo reaccionás bajo estrés y hacia dónde crecés.</span></li>
+      <li><b>Tus vínculos</b><span>Tu tipo más compatible y los signos con los que fluís.</span></li>
+    </ul>
+  </div></section>
+
+  <section class="block"><div class="wrap">
+    <div class="block-head">
+      <span class="label">Así se lee por dentro</span>
+      <h2>Un fragmento de ejemplo</h2>
+    </div>
+    <div class="sample">
+      <div class="datarow"><span>Tipo 6 · Ala 5 · Autoconservación</span><span>Sol Capricornio 22°</span><span>Luna Aries 08°</span><span>Asc Virgo 14°</span></div>
+      <div class="fade">
+        <p>Tu Luna en Aries te pide reaccionar ya: cuando algo te inquieta, el cuerpo se adelanta a la cabeza. Para un Tipo 6, cuyo miedo de fondo es quedarse sin apoyo, eso produce un patrón muy reconocible: la duda dura poco y se convierte en acción defensiva.</p>
+        <p>Por eso a veces te ven más seguro de lo que te sentís. Tu Sol en Capricornio suma otra capa: necesitás que lo que construís sea sólido, y eso hace que la ansiedad del 6 se ordene en planes, previsiones y responsabilidades que asumís antes de que nadie te las pida.</p>
+        <p>El ascendente en Virgo es la puerta de entrada: lo que el resto ve primero es a alguien atento a los detalles, prolijo, un poco reservado.</p>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="block"><div class="wrap">
+    <div class="block-head"><span class="label">Cómo funciona</span><h2>Tres pasos</h2></div>
+    <ol class="steps">
+      <li><h3>Respondés 40 situaciones</h3><p>Para cada una elegís la reacción que más se parece a la tuya.</p></li>
+      <li><h3>Cargás tu nacimiento</h3><p>Fecha, lugar y, si la sabés, la hora. Con eso calculamos tu carta.</p></li>
+      <li><h3>Ves tu cielo y tu adelanto</h3><p>El reporte completo se desbloquea después y también te llega por email.</p></li>
+    </ol>
+  </div></section>
+
+  <section class="block"><div class="wrap">
+    <div class="block-head"><span class="label">Preguntas frecuentes</span><h2>Antes de empezar</h2></div>
+    <div class="faq">
+      <details><summary>¿Necesito saber mi hora de nacimiento?</summary><p>No es obligatoria. Sin hora calculamos el Sol, la Luna y todos los planetas, pero no el Ascendente. Si la sabés, aparece en tu partida de nacimiento o podés preguntarla en tu familia.</p></details>
+      <details><summary>¿Qué es el Ascendente?</summary><p>Es el signo que salía por el horizonte en el momento exacto en que naciste. Cambia cada dos horas, aproximadamente, por eso necesita la hora y el lugar.</p></details>
+      <details><summary>¿Hacer el test cuesta algo?</summary><p>Hacer el test y ver tu cielo con el adelanto no tiene costo. El reporte completo es pago y lo decidís después de ver el adelanto.</p></details>
+      <details><summary>¿En qué se basa?</summary><p>El Eneagrama sigue el modelo de Riso y Hudson: 9 tipos definidos por la motivación de fondo. La carta natal usa astrología tropical, con posiciones planetarias calculadas por efemérides astronómicas. Es una herramienta de autoconocimiento, no un diagnóstico ni una predicción.</p></details>
+      <details><summary>¿Qué hacen con mis datos?</summary><p>Usamos tu fecha, hora y lugar de nacimiento solo para calcular tu carta, y tu email para mandarte el resultado. No los vendemos ni los compartimos fuera de lo necesario para armar tu reporte.</p></details>
+      <details><summary>¿Cómo se paga el reporte?</summary><p>Con Mercado Pago, en un solo pago y sin suscripciones. Si el reporte no te aporta valor, en los primeros 7 días te devolvemos el dinero.</p></details>
+    </div>
+  </div></section>
+
+  <section class="block"><div class="wrap final">
+    <h2>¿Qué dice tu cielo de tu carácter?</h2>
+    <button class="btn" type="button" data-go="quiz">Empezar el test</button>
+  </div></section>
+
+  <footer><div class="wrap">
+    <span>© 2026 Astrotipo · Pagos procesados por Mercado Pago</span>
+    <span>Datos de ciudades: GeoNames (CC BY 4.0) · Posiciones planetarias: Astronomy Engine</span>
+  </div></footer>
+</main>
+
+<!-- ============ TEST ============ -->
+<main id="sQuiz" hidden>
+  <div class="wrap narrow screen">
+    <div class="qtop"><span class="label" id="qSection">Parte 1 · Tus reacciones</span><span class="muted num" id="qCount"></span></div>
+    <div class="bar"><i id="qBar"></i></div>
+    <div class="qcard">
+      <h2 id="qText"></h2>
+      <p class="qhint">Elegí la reacción que más se parece a la tuya, aunque no sea exacta.</p>
+      <div class="opts" id="qOpts"></div>
+    </div>
+    <div class="qnav"><button class="linkbtn" id="qBack" type="button">← Volver a la anterior</button></div>
+  </div>
+</main>
+
+<!-- ============ NACIMIENTO ============ -->
+<main id="sBirth" hidden>
+  <div class="wrap narrow screen">
+    <div class="res-head">
+      <span class="label">Parte 2 · Tu cielo</span>
+      <h2>¿Cuándo y dónde naciste?</h2>
+      <p class="muted">Con esto calculamos la posición exacta del Sol, la Luna y los planetas en ese momento.</p>
+    </div>
+    <form class="form" id="birthForm" novalidate>
+      <div class="field">
+        <span class="flabel">Fecha de nacimiento</span>
+        <div class="row3">
+          <select id="bDay" aria-label="Día"></select>
+          <select id="bMonth" aria-label="Mes"></select>
+          <select id="bYear" aria-label="Año"></select>
+        </div>
+      </div>
+      <div class="field">
+        <span class="flabel">Hora de nacimiento</span>
+        <div class="row2">
+          <select id="bHour" aria-label="Hora"></select>
+          <select id="bMin" aria-label="Minutos"></select>
+        </div>
+        <label class="check"><input type="checkbox" id="bNoTime"> No sé mi hora</label>
+        <p class="help" id="timeHelp">Con la hora sumamos tu Ascendente. Si no la sabés, el resto de la carta sale igual.</p>
+      </div>
+      <div class="field">
+        <label for="bCity">Lugar de nacimiento</label>
+        <input type="text" id="bCity" autocomplete="off" placeholder="Escribí tu ciudad" role="combobox" aria-expanded="false" aria-controls="citySugg" aria-autocomplete="list">
+        <ul class="sugg" id="citySugg" role="listbox" hidden></ul>
+        <span class="chosen" id="cityChosen"></span>
+        <p class="help">Si tu pueblo no aparece, elegí la ciudad más cercana. La diferencia en la carta es mínima.</p>
+      </div>
+      <p class="err" id="birthErr" hidden></p>
+      <div><button class="btn" type="submit">Continuar</button></div>
+    </form>
+  </div>
+</main>
+
+<!-- ============ EMAIL ============ -->
+<main id="sEmail" hidden>
+  <div class="wrap narrow screen">
+    <div class="res-head">
+      <span class="label">Test completado</span>
+      <h2>Ya tenemos todo para armar tu mapa</h2>
+      <p class="muted">Ingresá tu nombre y tu email. Tu resultado queda guardado y te mandamos el acceso para volver cuando quieras.</p>
+    </div>
+    <form class="form" id="emailForm" novalidate>
+      <div class="field"><label for="uName">Nombre</label><input type="text" id="uName" autocomplete="given-name" maxlength="40"></div>
+      <div class="field"><label for="uEmail">Email</label><input type="email" id="uEmail" autocomplete="email" maxlength="120"></div>
+      <p class="err" id="emailErr" hidden></p>
+      <div><button class="btn" type="submit">Ver mi cielo</button></div>
+      <p class="help">Sin spam. Solo te escribimos sobre tu reporte.</p>
+    </form>
+  </div>
+</main>
+
+<!-- ============ CARGANDO ============ -->
+<main id="sLoading" hidden>
+  <div class="wrap narrow loading">
+    <svg viewBox="-110 -110 220 220" aria-hidden="true" id="loadSvg"></svg>
+    <h2 id="loadTitle">Armando tu mapa</h2>
+    <ul class="ticks" id="ticks"></ul>
+  </div>
+</main>
+
+<!-- ============ ADELANTO + PAGO ============ -->
+<main id="sResult" hidden>
+  <div class="wrap narrow screen">
+    <div class="res-head">
+      <span class="label">Tu adelanto</span>
+      <h2 id="rTitle"></h2>
+      <div class="datarow" id="rData"></div>
+      <p class="notice" id="rNotice" hidden></p>
+    </div>
+    <div class="sky3" id="rSky"></div>
+    <div class="rsec first">
+      <span class="label">Tu balance de elementos</span>
+      <div class="elems" id="rElems"></div>
+    </div>
+    <div class="rsec">
+      <span class="label">Lo que ya vemos</span>
+      <p class="preview-text" id="rPreview"></p>
+    </div>
+    <div class="rsec">
+      <span class="label">Se desbloquea con tu reporte</span>
+      <div class="locks" id="rLocks"></div>
+    </div>
+    <div class="rsec">
+      <span class="label">Tu puntaje en los 9 tipos</span>
+      <p class="help">Los nombres se desbloquean con tu reporte completo.</p>
+      <div class="scores" id="rScores"></div>
+    </div>
+    <div class="rsec">
+      <span class="label">Tu reporte completo incluye</span>
+      <ol class="ilist">
+        <li><b>Tu eneatipo, ala e instinto</b><span>Con tu deseo fundamental y tu miedo básico.</span></li>
+        <li><b>Tus tres pilares celestes</b><span>Sol, Luna y Ascendente, explicados para vos.</span></li>
+        <li><b>Dónde se cruzan</b><span>Cómo tu carta modula tu eneatipo, punto por punto.</span></li>
+        <li><b>Todos tus planetas</b><span>Cómo pensás, cómo amás, cómo actuás.</span></li>
+        <li><b>Tu sombra y tu crecimiento</b><span>Hacia dónde vas bajo estrés y en tu mejor versión.</span></li>
+        <li><b>Tus vínculos</b><span>Tipo más compatible y afinidad por elementos.</span></li>
+        <li><b>Prácticas para tu día a día</b><span>Pensadas para tu combinación de tipo y carta.</span></li>
+      </ol>
+      <p class="help">Escrito con tu nombre · Descargable en PDF · Llega por email · Pago único, sin suscripciones · Garantía de 7 días</p>
+    </div>
+    <div class="spacer"></div>
+  </div>
+  <div class="paybar"><div class="wrap">
+    <div class="price"><b id="priceTxt"></b><small>Pago único con Mercado Pago</small></div>
+    <button class="btn" type="button" id="payBtn">Desbloquear mi reporte</button>
+  </div>
+  <div class="wrap"><p class="err payerr" id="payErr" hidden></p></div></div>
+</main>
+
+<!-- ============ REPORTE ============ -->
+<main id="sReport" hidden>
+  <div class="wrap screen">
+    <div id="pdfArea">
+      <div class="cover">
+        <div class="meta">
+          <span class="label">Tu reporte Astrotipo</span>
+          <h1 id="pTitle"></h1>
+          <div class="badges" id="pBadges"></div>
+          <div class="datarow" id="pData" style="margin:0"></div>
+        </div>
+        <svg class="wheel" id="pWheel" viewBox="-185 -185 370 370" role="img" aria-label="Tu carta natal con tu eneatipo marcado en el centro"></svg>
+      </div>
+      <div class="ai" id="pAI"></div>
+      <div class="rsec">
+        <span class="label">Tu carta completa</span>
+        <div class="tblwrap"><table><thead><tr><th>Planeta</th><th>Signo</th><th>Posición</th><th>Habla de</th></tr></thead><tbody id="pPlanets"></tbody></table></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" type="button" id="pdfBtn">Descargar PDF</button>
+      <span class="help" id="pdfMsg"></span>
+    </div>
+    <p class="notice" id="emailCopy" hidden></p>
+    <p class="help" style="margin-top:14px">Si el botón no descarga (a veces pasa dentro de Instagram o Facebook), abrí esta página en Chrome o Safari.</p>
+  </div>
+</main>
+
+<!-- ============ ERROR ============ -->
+<main id="sError" hidden>
+  <div class="wrap narrow screen">
+    <div class="res-head"><span class="label">Algo salió mal</span><h2>No pudimos mostrar tu reporte</h2></div>
+    <p id="errText"></p>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+<script>
+(function(){
+"use strict";
+
+/* ================= CONFIGURACIÓN ================= */
+// precio: solo lo que se muestra. El que se cobra está en api/_lib.js (PRECIO): cambiá los dos juntos.
+// ga4 y metaPixel: pegá los IDs cuando los tengas (vacíos = no se cargan).
+const CONFIG = { precio: 6000, ga4: "", metaPixel: "", contacto: "yannittojorge@gmail.com" };
+
+/* ================= ANALÍTICA ================= */
+if (CONFIG.ga4) {
+  const s = document.createElement("script"); s.async = true; s.src = "https://www.googletagmanager.com/gtag/js?id=" + CONFIG.ga4; document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || []; window.gtag = function(){ dataLayer.push(arguments); }; gtag("js", new Date()); gtag("config", CONFIG.ga4);
+}
+if (CONFIG.metaPixel) {
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+  fbq("init", CONFIG.metaPixel); fbq("track", "PageView");
+}
+const ga = (n, p) => { try { if (window.gtag) gtag("event", n, p || {}); } catch (e) {} };
+const fb = (n, p) => { try { if (window.fbq) fbq("track", n, p || {}); } catch (e) {} };
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+};
+const once = k => { if (store.get("once_" + k, false)) return false; store.set("once_" + k, true); return true; };
+
+/* ================= DATOS ================= */
+const SIGNS=['Aries','Tauro','Géminis','Cáncer','Leo','Virgo','Libra','Escorpio','Sagitario','Capricornio','Acuario','Piscis'];
+const SGL=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'].map(g=>g+'︎');
+const PGL={Sol:'☉',Luna:'☽',Mercurio:'☿',Venus:'♀',Marte:'♂','Júpiter':'♃',Saturno:'♄',Urano:'♅',Neptuno:'♆','Plutón':'♇'};
+const ELEM=['Fuego','Tierra','Aire','Agua'];
+const SIGNTXT=[
+ {sol:'iniciativa, coraje y necesidad de abrir camino',luna:'necesitás moverte rápido con lo que sentís; la emoción se te vuelve acción'},
+ {sol:'constancia, sentido práctico y lealtad a lo que construís',luna:'necesitás estabilidad, cuerpo y tiempo para procesar lo que te pasa'},
+ {sol:'curiosidad, palabra y ganas de entenderlo todo',luna:'necesitás hablar lo que sentís para poder entenderlo'},
+ {sol:'cuidado, memoria emocional y sentido de pertenencia',luna:'necesitás un lugar seguro y gente propia para estar bien'},
+ {sol:'expresión, generosidad y necesidad de brillar con lo propio',luna:'necesitás sentirte visto y querido de forma explícita'},
+ {sol:'precisión, servicio y ganas de mejorar lo que tocás',luna:'necesitás orden y sentirte útil para estar en calma'},
+ {sol:'equilibrio, vínculo y sentido estético',luna:'necesitás armonía alrededor para estar bien adentro'},
+ {sol:'intensidad, profundidad y capacidad de transformarte',luna:'sentís todo hondo y no se lo mostrás a cualquiera'},
+ {sol:'búsqueda de sentido, libertad y expansión',luna:'necesitás horizonte, aire y algo en qué creer'},
+ {sol:'ambición, responsabilidad y construcción a largo plazo',luna:'te cuidás siendo autosuficiente y te cuesta pedir'},
+ {sol:'independencia, ideas propias y mirada de futuro',luna:'necesitás espacio y libertad para sentir a tu manera'},
+ {sol:'sensibilidad, imaginación y empatía sin bordes',luna:'absorbés lo que sienten los demás casi sin filtro'}
+];
+const TYPENAME={1:'El Reformador',2:'El Ayudador',3:'El Triunfador',4:'El Individualista',5:'El Investigador',6:'El Leal',7:'El Entusiasta',8:'El Desafiador',9:'El Pacificador'};
+const CENTRO={1:'i',2:'e',3:'e',4:'e',5:'m',6:'m',7:'m',8:'i',9:'i'};
+const CTRTXT={
+ i:['Tu cuerpo reacciona antes que tu cabeza, y tu carta suma más combustible: cuando algo te parece injusto o te frena, la energía sale rápido.','Tu instinto busca estabilidad y tu carta también: sos alguien que sostiene. El riesgo es quedarte en lo conocido aunque ya no te sirva.','Tu motor es instintivo, pero tu carta te lleva a la cabeza: podés explicar con claridad lo que sentís en el cuerpo sin terminar de habitarlo.','Debajo de tus reacciones hay una sensibilidad grande que tu carta subraya: lo que te enoja casi siempre te dolió primero.'],
+ e:['Tu forma de estar depende mucho de cómo te ven, y tu carta le pone escenario: necesitás expresarte y que eso tenga eco.','Tu centro es el vínculo, y tu carta lo baja a lo concreto: demostrás lo que sentís haciendo cosas más que diciéndolas.','Tu centro es emocional y tu carta es mental: tendés a pensar los sentimientos en vez de sentirlos, y a veces llegás tarde a tu propia emoción.','Tu centro es emocional y tu carta también: sentís en alta definición. Es tu don y también tu desgaste.'],
+ m:['Tu mente anticipa y planifica, y tu carta te pide acción: vivís entre pensarlo bien y lanzarte ya.','Tu cabeza busca seguridad y tu carta busca resultados concretos: sos de los que piensan y después construyen.','Tu motor es mental y tu carta también: ideas, posibilidades, conexiones. El desafío es bajar al cuerpo y a lo que sentís.','Tu mente intenta ordenar lo que tu carta siente muy hondo: pensás para no desbordarte.']
+};
+const PLMEAN={Sol:'Tu identidad y lo que querés irradiar',Luna:'Tus emociones y lo que necesitás para estar bien',Mercurio:'Cómo pensás, aprendés y te comunicás',Venus:'Cómo amás y qué valorás',Marte:'Cómo actuás, deseás y te enojás','Júpiter':'Dónde crecés y tenés suerte',Saturno:'Tus límites, deberes y lecciones',Urano:'Dónde rompés moldes',Neptuno:'Tus ideales y lo que te inspira','Plutón':'Dónde te transformás'};
+const INSTN={sp:'Autoconservación',so:'Social',sx:'Sexual (uno a uno)'};
+
+/* --- Test: 36 situaciones (cada tipo aparece 12 veces y cada par de tipos 3 veces) + 4 de instinto --- */
+const TRI=[
+ {t:[1,2,3],q:[
+  ['Un compañero te pide ayuda con su trabajo justo cuando tenés el tuyo atrasado.',{1:'Lo ayudo, pero me molesta que no se haya organizado mejor: las cosas se hacen a tiempo.',2:'Lo ayudo igual. Me cuesta decir que no cuando alguien me necesita.',3:'Le doy una mano rápida y vuelvo a lo mío: tengo que cumplir con lo que prometí.'}],
+  ['Terminás un proyecto y te felicitan.',{1:'Agradezco, pero en mi cabeza aparecen los detalles que podrían haber salido mejor.',2:'Lo que más me llega es saber que le sirvió a alguien.',3:'Me encanta: siento que el esfuerzo se vio, y ya pienso en el próximo objetivo.'}],
+  ['Te toca organizar una juntada para un grupo de amigos.',{1:'Me ocupo de que todo esté bien hecho. Si algo sale desprolijo, me lo reprocho.',2:'Pienso en qué va a hacer sentir bien a cada uno y me encargo de los detalles personales.',3:'Quiero que salga impecable y que todos se vayan comentando lo bien que estuvo.'}]]},
+ {t:[4,5,6],q:[
+  ['Te invitan a una fiesta donde no conocés a casi nadie.',{4:'Voy, pero me siento un poco afuera, como si los demás tuvieran algo que a mí me falta.',5:'Observo desde un costado y me voy cuando se me acaba la energía.',6:'Antes de ir averiguo quién va a estar, y una vez ahí me quedo cerca de alguien conocido.'}],
+  ['Recibís una crítica sobre algo que hiciste.',{4:'Me la tomo muy personal: siento que cuestionan quién soy.',5:'La analizo en frío para ver si tiene fundamento antes de reaccionar.',6:'Me quedo dando vueltas: ¿lo dijo por algo más? ¿Estoy en problemas?'}],
+  ['Tenés un fin de semana libre y sin planes.',{4:'Me dejo llevar por lo que siento: música, escribir, algo que me conecte conmigo.',5:'Me meto a fondo en un tema que me interesa, sin interrupciones.',6:'Resuelvo pendientes y dejo todo en orden para estar tranquilo la semana que viene.'}]]},
+ {t:[7,8,9],q:[
+  ['Un plan que esperabas se cancela a último momento.',{7:'Enseguida pienso en otra cosa para hacer. No me quedo en el bajón.',8:'Me enoja y lo digo de frente: no me gusta que me dejen colgado.',9:'No pasa nada, me acomodo. Me quedo tranquilo en casa.'}],
+  ['En el trabajo hay que tomar una decisión difícil y nadie se anima.',{7:'Propongo varias alternativas creativas para que no sea tan pesado.',8:'Tomo el mando y decido. Alguien tiene que hacerlo.',9:'Escucho a todos y busco algo en lo que podamos estar de acuerdo.'}],
+  ['Alguien te pide que le cuentes algo doloroso de tu pasado.',{7:'Le busco el lado positivo o cambio de tema. No me gusta quedarme en lo triste.',8:'Lo cuento sin vueltas, pero no muestro cuánto me afectó.',9:'Le quito importancia. Ya pasó y no quiero revolver.'}]]},
+ {t:[1,4,7],q:[
+  ['Te toca elegir a dónde ir de vacaciones.',{1:'Investigo bien y elijo lo que más conviene. Hacerlo bien importa.',4:'Busco un lugar con alma, distinto, que tenga algo especial para mí.',7:'Quiero ir a todos lados. Armo un plan con mil actividades.'}],
+  ['A la noche, antes de dormir, pensás en tu día.',{1:'Repaso lo que hice mal o lo que quedó pendiente.',4:'Me quedo con cómo me sentí y con lo que me falta para estar pleno.',7:'Pienso en lo que viene mañana y en las cosas lindas que tengo por delante.'}],
+  ['Te regalan algo que no te gusta.',{1:'Agradezco con educación, aunque me cuesta fingir: creo que hay que ser honesto.',4:'Me desilusiona un poco. Siento que no me conocen de verdad.',7:'Me río, lo cambio o le encuentro alguna gracia. No me hago drama.'}]]},
+ {t:[2,5,8],q:[
+  ['Un amigo atraviesa un mal momento.',{2:'Estoy ahí todo el tiempo: le escribo, lo visito, le llevo algo.',5:'Lo escucho y le paso información o recursos que le puedan servir.',8:'Me pongo en modo protector. Si alguien lo lastimó, me encargo.'}],
+  ['Te piden que lideres un equipo nuevo.',{2:'Me enfoco en conocer a cada persona y en que se sienta acompañada.',5:'Primero estudio bien cómo funciona todo antes de dar una indicación.',8:'Acepto enseguida y dejo claro desde el principio cómo vamos a trabajar.'}],
+  ['Alguien invade tu espacio o tu tiempo sin preguntar.',{2:'Me molesta, pero lo dejo pasar para no quedar como egoísta.',5:'Me cierro y me alejo. Necesito recuperar mi espacio.',8:'Le pongo un límite claro en el momento.'}]]},
+ {t:[3,6,9],q:[
+  ['Te ofrecen un ascenso con más responsabilidad.',{3:'Lo tomo. Es un paso más y quiero llegar lejos.',6:'Me genera dudas: ¿voy a poder?, ¿qué riesgos tiene? Lo consulto con gente de confianza.',9:'Me tienta, pero no quiero perder la tranquilidad que tengo.'}],
+  ['Hay un conflicto entre dos personas cercanas a vos.',{3:'Trato de que no afecte el clima ni lo que hay que hacer. Lo resuelvo rápido y sigo.',6:'Me preocupa de qué lado quedar y qué consecuencias va a tener.',9:'Me quedo en el medio y trato de calmar las aguas.'}],
+  ['Tenés que presentarte ante gente nueva.',{3:'Sé qué mostrar de mí para causar buena impresión.',6:'Me pongo alerta. Tardo en confiar hasta ver cómo es cada uno.',9:'Me adapto al grupo y dejo que los demás lleven la conversación.'}]]},
+ {t:[1,5,9],q:[
+  ['Tenés que tomar una decisión importante sobre tu futuro.',{1:'Pienso en qué es lo correcto, aunque no sea lo más cómodo.',5:'Junto toda la información posible antes de decidir.',9:'La voy postergando. Me cuesta saber qué quiero realmente.'}],
+  ['Alguien rompe una regla que a vos te parece importante.',{1:'Me indigna. Me cuesta dejarlo pasar.',5:'Lo registro, pero no me involucro. No es asunto mío.',9:'No digo nada para no generar tensión.'}],
+  ['Te enojás con alguien.',{1:'Me lo guardo, pero se me nota en el tono o en lo exigente que me pongo.',5:'Me retiro a pensar y lo proceso solo.',9:'Me cuesta darme cuenta de que estoy enojado. Me desconecto.'}]]},
+ {t:[2,6,7],q:[
+  ['Un amigo te cuenta un proyecto arriesgado.',{2:'Lo apoyo en todo lo que necesite. Quiero que sepa que cuenta conmigo.',6:'Le marco los riesgos para que no le salga mal.',7:'¡Me re copa! Ya le tiro ideas para hacerlo más grande.'}],
+  ['Estás pasando por un momento de mucho estrés.',{2:'Igual sigo pendiente de los demás. Me cuesta pedir ayuda.',6:'Me lleno de preocupaciones e imagino escenarios negativos.',7:'Me lleno de actividades y planes para no pensar.'}],
+  ['Tenés que comprometerte con algo a largo plazo.',{2:'Si alguien que quiero me necesita ahí, me comprometo sin dudarlo.',6:'Me comprometo cuando sé que es confiable, y después soy muy fiel.',7:'Me cuesta: siento que me puedo perder otras opciones mejores.'}]]},
+ {t:[3,4,8],q:[
+  ['Algo te sale mal delante de otros.',{3:'Me afecta mucho la imagen. Enseguida busco cómo revertirlo.',4:'Me hundo un poco. Siento que confirma que algo en mí no está bien.',8:'Me lo banco y vuelvo con más fuerza. Nadie me va a ver débil.'}],
+  ['Elegís qué ponerte para un evento.',{3:'Algo que me haga ver bien y acorde al lugar.',4:'Algo que exprese quién soy, aunque nadie más se vista así.',8:'Lo que me resulte cómodo. No me importa mucho lo que piensen.'}],
+  ['Alguien te muestra su costado más vulnerable.',{3:'Lo acompaño, aunque a mí me cuesta mostrar mis fracasos.',4:'Me conecto profundamente. Siento que ahí aparece lo auténtico.',8:'Lo protejo, aunque yo rara vez me muestro así.'}]]},
+ {t:[3,5,7],q:[
+  ['Te sobra una hora libre en el día.',{3:'La uso para adelantar algo. No me gusta perder el tiempo.',5:'Leo, investigo o pienso en algo que me interesa.',7:'Busco algo para disfrutar: salir, llamar a alguien, probar algo nuevo.'}],
+  ['Empezás a aprender algo nuevo.',{3:'Quiero dominarlo rápido para que se note el resultado.',5:'Quiero entenderlo a fondo, desde la base, antes de mostrarlo.',7:'Me entusiasma al principio y pruebo de todo, aunque después salte a otra cosa.'}],
+  ['Te sentís bajoneado.',{3:'Me pongo a hacer cosas. Lo productivo me ordena.',5:'Me aíslo hasta entender qué me pasa.',7:'Me distraigo con algo que me levante. No me gusta quedarme en lo negativo.'}]]},
+ {t:[1,6,8],q:[
+  ['Un jefe toma una decisión injusta.',{1:'Me indigna porque está mal. Pienso en cómo debería haber sido.',6:'Me preocupa lo que significa para mí y para el equipo. Lo hablo con colegas.',8:'Lo confronto directamente. No me quedo callado.'}],
+  ['Tenés que confiar en alguien nuevo.',{1:'Confío si veo que actúa con coherencia y seriedad.',6:'Me cuesta. Lo pongo a prueba hasta estar seguro.',8:'Confío, pero si me traiciona no hay vuelta atrás.'}],
+  ['Algo sale mal en un trabajo en grupo.',{1:'Me cuesta no corregir todo yo. Siento que tendría que haber estado más atento.',6:'Busco quién tiene la información y armo un plan B.',8:'Tomo el control de la situación y la resuelvo.'}]]},
+ {t:[2,4,9],q:[
+  ['Alguien que querés se olvida de tu cumpleaños.',{2:'Me duele, porque yo siempre estoy en esas cosas para los demás.',4:'Me siento invisible, como si no fuera importante para nadie.',9:'No le doy mucha importancia. No quiero hacer un problema.'}],
+  ['Tu pareja o un amigo te pide más espacio.',{2:'Me pregunto qué hice mal y busco cómo hacerlo sentir mejor.',4:'Lo vivo como un rechazo y me quedo con esa sensación mucho tiempo.',9:'Le doy el espacio sin problema. No quiero presionar.'}],
+  ['Pensás en lo que querés para tu vida.',{2:'Que la gente que quiero esté bien y me tenga cerca.',4:'Encontrar algo con sentido profundo, que sea realmente mío.',9:'Estar en paz, sin conflictos, con una vida tranquila.'}]]}
+];
+const INSTQ=[
+ ['Cuando empezás algo nuevo, ¿qué es lo primero que te preocupa?',{sp:'Tener lo necesario: plata, tiempo, salud, un lugar seguro.',so:'Mi lugar en el grupo y cómo me van a ver los demás.',sx:'Que haya química, algo o alguien que me apasione de verdad.'}],
+ ['Tu sábado ideal se parece más a esto:',{sp:'En casa, cómodo, comiendo rico y descansando.',so:'Con amigos, en un evento o una actividad en grupo.',sx:'Con una persona especial, en una charla profunda o algo intenso.'}],
+ ['¿Qué te drena más?',{sp:'Sentir que mi bienestar o mis recursos están en riesgo.',so:'Sentirme excluido o sin un lugar propio.',sx:'Una relación tibia, sin chispa ni profundidad.'}],
+ ['¿En qué ponés más energía sin darte cuenta?',{sp:'En organizar mi vida práctica: finanzas, salud, comodidad.',so:'En mis contactos, mis grupos y las causas que me importan.',sx:'En las personas o pasiones que me atrapan.'}]
+];
+const QUIZ=[];
+{const typeQs=[];for(let r=0;r<3;r++)for(let t=0;t<12;t++)typeQs.push({kind:'t',s:TRI[t].q[r][0],o:TRI[t].q[r][1],tri:TRI[t].t});
+ let ii=0;for(let i=0;i<typeQs.length;i++){QUIZ.push(typeQs[i]);if((QUIZ.length%10)===9&&ii<4){QUIZ.push({kind:'i',s:INSTQ[ii][0],o:INSTQ[ii][1]});ii++;}}
+ while(ii<4){QUIZ.push({kind:'i',s:INSTQ[ii][0],o:INSTQ[ii][1]});ii++;}}
+function rng(seed){return function(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};}
+QUIZ.forEach((q,i)=>{const keys=Object.keys(q.o);const r=rng(i*97+13);for(let k=keys.length-1;k>0;k--){const j=Math.floor(r()*(k+1));[keys[k],keys[j]]=[keys[j],keys[k]];}q.keys=keys;});
+
+// Respaldo por si el buscador de ciudades no responde
+const AR='America/Argentina/';
+const CITIES_FALLBACK=[
+ ['Ciudad de Buenos Aires','CABA',-34.60,-58.38,AR+'Buenos_Aires'],['La Plata','Buenos Aires',-34.92,-57.95,AR+'Buenos_Aires'],['Mar del Plata','Buenos Aires',-38.00,-57.56,AR+'Buenos_Aires'],['Bahía Blanca','Buenos Aires',-38.72,-62.27,AR+'Buenos_Aires'],
+ ['Córdoba','Córdoba',-31.42,-64.18,AR+'Cordoba'],['Río Cuarto','Córdoba',-33.13,-64.35,AR+'Cordoba'],['Villa María','Córdoba',-32.41,-63.24,AR+'Cordoba'],
+ ['Rosario','Santa Fe',-32.95,-60.64,AR+'Cordoba'],['Santa Fe','Santa Fe',-31.63,-60.70,AR+'Cordoba'],['Paraná','Entre Ríos',-31.73,-60.53,AR+'Cordoba'],
+ ['Corrientes','Corrientes',-27.47,-58.83,AR+'Cordoba'],['Resistencia','Chaco',-27.45,-58.99,AR+'Cordoba'],['Posadas','Misiones',-27.37,-55.90,AR+'Cordoba'],['Formosa','Formosa',-26.18,-58.17,AR+'Cordoba'],['Santiago del Estero','Santiago del Estero',-27.78,-64.26,AR+'Cordoba'],
+ ['Salta','Salta',-24.79,-65.41,AR+'Salta'],['San Ramón de la Nueva Orán','Salta',-23.13,-64.33,AR+'Salta'],['Tartagal','Salta',-22.52,-63.80,AR+'Salta'],
+ ['San Salvador de Jujuy','Jujuy',-24.19,-65.30,AR+'Jujuy'],['San Miguel de Tucumán','Tucumán',-26.81,-65.22,AR+'Tucuman'],['Catamarca','Catamarca',-28.47,-65.78,AR+'Catamarca'],['La Rioja','La Rioja',-29.41,-66.86,AR+'La_Rioja'],
+ ['San Juan','San Juan',-31.54,-68.54,AR+'San_Juan'],['Mendoza','Mendoza',-32.89,-68.83,AR+'Mendoza'],['San Luis','San Luis',-33.30,-66.34,AR+'San_Luis'],
+ ['Santa Rosa','La Pampa',-36.62,-64.29,AR+'Salta'],['Neuquén','Neuquén',-38.95,-68.06,AR+'Salta'],['San Carlos de Bariloche','Río Negro',-41.13,-71.31,AR+'Salta'],
+ ['Comodoro Rivadavia','Chubut',-45.86,-67.48,AR+'Catamarca'],['Río Gallegos','Santa Cruz',-51.62,-69.22,AR+'Rio_Gallegos'],['Ushuaia','Tierra del Fuego',-54.80,-68.30,AR+'Ushuaia'],
+ ['Montevideo','Uruguay',-34.90,-56.16,'America/Montevideo'],['Asunción','Paraguay',-25.26,-57.58,'America/Asuncion'],['Santiago','Chile',-33.45,-70.67,'America/Santiago'],['Madrid','España',40.42,-3.70,'Europe/Madrid']
+].map(c=>({nombre:c[0],region:c[1],lat:c[2],lon:c[3],tz:c[4]}));
+
+/* ================= MOTOR ASTRONÓMICO ================= */
+const A=window.Astronomy;
+const rad=Math.PI/180,deg=180/Math.PI,norm=x=>((x%360)+360)%360;
+function tzOffsetMin(ms,tz){const f=new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});const p={};f.formatToParts(new Date(ms)).forEach(x=>p[x.type]=x.value);return (Date.UTC(+p.year,+p.month-1,+p.day,+p.hour%24,+p.minute,+p.second)-ms)/60000;}
+function localToUTC(y,mo,d,h,mi,tz){const g=Date.UTC(y,mo-1,d,h,mi);let u=g-tzOffsetMin(g,tz)*60000;u=g-tzOffsetMin(u,tz)*60000;return u;}
+const BODIES=[['Mercurio','Mercury'],['Venus','Venus'],['Marte','Mars'],['Júpiter','Jupiter'],['Saturno','Saturn'],['Urano','Uranus'],['Neptuno','Neptune'],['Plutón','Pluto']];
+function sgn(l){l=norm(l);const i=Math.floor(l/30);const dd=l-i*30;return {lon:l,i,signo:SIGNS[i],g:Math.floor(dd),m:Math.floor((dd%1)*60)};}
+function positionsAt(date){const t=A.MakeTime(date);const p={Sol:A.SunPosition(t).elon,Luna:A.EclipticGeoMoon(t).lon};BODIES.forEach(([n,b])=>{p[n]=A.Ecliptic(A.GeoVector(A.Body[b],t,true)).elon;});const out={};for(const k in p)out[k]=sgn(p[k]);return {puntos:out,t};}
+// Misma cuenta que api/_lib.js (calcularCarta). u: minutos UTC desde 1970.
+function chart({u,conHora,la,lo}){
+  const {puntos,t}=positionsAt(new Date(u*60000));const out={puntos,asc:null,mc:null,lunaAlt:null,conHora};
+  if(conHora){const eps=A.e_tilt(t).tobl*rad,ramc=norm(A.SiderealTime(t)*15+lo)*rad,phi=la*rad;
+    out.asc=sgn(Math.atan2(Math.cos(ramc),-(Math.sin(ramc)*Math.cos(eps)+Math.tan(phi)*Math.sin(eps)))*deg);
+    out.mc=sgn(Math.atan2(Math.sin(ramc),Math.cos(ramc)*Math.cos(eps))*deg);}
+  else{const a=sgn(A.EclipticGeoMoon(A.MakeTime(new Date((u-720)*60000))).lon),b=sgn(A.EclipticGeoMoon(A.MakeTime(new Date((u+719)*60000))).lon);if(a.i!==b.i)out.lunaAlt=[a.signo,b.signo];}
+  const W={Sol:3,Luna:3,Mercurio:1.5,Venus:1.5,Marte:1.5,'Júpiter':1,Saturno:1};const e=[0,0,0,0];
+  for(const k in W)e[puntos[k].i%4]+=W[k];if(out.asc)e[out.asc.i%4]+=2;const tot=e.reduce((a,b)=>a+b,0);
+  out.elementos=e.map(v=>Math.round(v/tot*100));out.dom=e.indexOf(Math.max(...e));
+  return out;
+}
+
+/* ================= PUNTAJE ================= */
+function score(ans){
+  const c={1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0},head={},inst={sp:0,so:0,sx:0};let lastInst=null;
+  QUIZ.forEach((q,i)=>{const a=ans[i];if(a==null)return;
+    if(q.kind==='t'){c[a]++;q.tri.forEach(o=>{if(o!=a){const k=a+'>'+o;head[k]=(head[k]||0)+1;}});}
+    else{inst[a]++;lastInst=a;}});
+  const order=Object.keys(c).map(Number).sort((x,y)=>{if(c[y]!==c[x])return c[y]-c[x];return (head[y+'>'+x]||0)-(head[x+'>'+y]||0);});
+  const t=order[0];const L=t===1?9:t-1,R=t===9?1:t+1;const wing=c[L]>c[R]?L:c[R]>c[L]?R:((head[L+'>'+R]||0)>=(head[R+'>'+L]||0)?L:R);
+  const im=Math.max(inst.sp,inst.so,inst.sx);const tied=['sp','so','sx'].filter(k=>inst[k]===im);const instinct=tied.length===1?tied[0]:(tied.includes(lastInst)?lastInst:tied[0]);
+  return {t,w:wing,i:instinct,s:[1,2,3,4,5,6,7,8,9].map(k=>Math.round(c[k]/12*100))};
+}
+
+/* ================= RUEDA ================= */
+const NS='http://www.w3.org/2000/svg';
+function E(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;if(parent)parent.appendChild(e);return e;}
+// Colores resueltos (los SVG no siempre heredan variables al pasar a PDF)
+function palette(el){const cs=getComputedStyle(el||document.documentElement);const v=n=>cs.getPropertyValue(n).trim();return {ink:v('--ink'),muted:v('--muted'),line:v('--line'),accent:v('--accent'),surface:v('--surface'),paper:v('--paper')};}
+const LIGHT={ink:'#14213D',muted:'#566079',line:'#C8CFDB',accent:'#B23A2C',surface:'#F8F9FB',paper:'#EDF0F4'};
+function ennPoint(k,R){const a=k*40*rad;return [R*Math.sin(a),-R*Math.cos(a)];}
+function drawEnneagram(g,R,hi,C,opts){opts=opts||{};
+  E('circle',{r:R,fill:'none',stroke:opts.ringColor||C.line,'stroke-width':opts.sw||1.2},g);
+  const line=seq=>{const d=seq.map((k,i)=>(i?'L':'M')+ennPoint(k,R).map(v=>v.toFixed(2)).join(' ')).join(' ');E('path',{d,fill:'none',stroke:opts.color||C.ink,'stroke-width':opts.sw||1.2,'stroke-opacity':opts.op||.75,'stroke-linejoin':'round',class:opts.cls||''},g);};
+  line([3,6,9,3]);line([1,4,2,8,5,7,1]);
+  if(opts.dots===false)return;
+  for(let k=1;k<=9;k++){const [x,y]=ennPoint(k,R);const on=k===hi;
+    E('circle',{cx:x,cy:y,r:on?7:3.2,fill:on?C.accent:C.surface,stroke:on?C.accent:C.ink,'stroke-width':1.2},g);
+    if(opts.labels){const [lx,ly]=ennPoint(k,R+15);E('text',{x:lx,y:ly+4,'text-anchor':'middle','font-family':'DM Sans, sans-serif','font-size':11,fill:on?C.accent:C.muted,'font-weight':on?700:400},g,String(k));}}
+}
+function drawWheel(svg,o,C){
+  svg.innerHTML='';C=C||palette();const ref=o.ascLon!=null?o.ascLon:0;
+  const P=(L,r)=>{const a=(180+(L-ref))*rad;return [r*Math.cos(a),-r*Math.sin(a)];};
+  const g=E('g',{},svg);
+  E('circle',{r:172,fill:C.surface,stroke:C.ink,'stroke-width':1.4},g);
+  E('circle',{r:140,fill:'none',stroke:C.ink,'stroke-width':1},g);
+  E('circle',{r:104,fill:'none',stroke:C.line,'stroke-width':1},g);
+  for(let i=0;i<12;i++){const [x1,y1]=P(i*30,140),[x2,y2]=P(i*30,172);E('line',{x1,y1,x2,y2,stroke:C.ink,'stroke-width':1},g);
+    for(let d=5;d<30;d+=5){const [a1,b1]=P(i*30+d,140),[a2,b2]=P(i*30+d,d===15?148:145);E('line',{x1:a1,y1:b1,x2:a2,y2:b2,stroke:C.muted,'stroke-width':.6},g);}
+    const [tx,ty]=P(i*30+15,158);E('text',{x:tx,y:ty+6,'text-anchor':'middle','font-family':'Noto Sans Symbols, Segoe UI Symbol, sans-serif','font-size':17,fill:i%4===0?C.accent:C.ink},g,SGL[i]);}
+  if(o.ascLon!=null){const [x1,y1]=P(o.ascLon,104),[x2,y2]=P(o.ascLon,186);E('line',{x1,y1,x2:x2+4,y2,stroke:C.accent,'stroke-width':1.6},g);
+    const [lx,ly]=P(o.ascLon,116);E('text',{x:lx+2,y:ly-6,'font-family':'DM Sans, sans-serif','font-size':9,'font-weight':700,fill:C.accent,'letter-spacing':'.08em'},g,'ASC');
+    if(o.mcLon!=null){const [m1,n1]=P(o.mcLon,104),[m2,n2]=P(o.mcLon,140);E('line',{x1:m1,y1:n1,x2:m2,y2:n2,stroke:C.muted,'stroke-width':1,'stroke-dasharray':'3 3'},g);
+      const [ml,nl]=P(o.mcLon,94);E('text',{x:ml,y:nl+3,'text-anchor':'middle','font-family':'DM Sans, sans-serif','font-size':8,fill:C.muted},g,'MC');}}
+  if(o.puntos){const arr=Object.keys(o.puntos).map(k=>({k,l:o.puntos[k].lon})).sort((a,b)=>a.l-b.l);let prev=-99,lane=0;
+    arr.forEach(p=>{lane=(p.l-prev<8)?(lane+1)%2:0;prev=p.l;const r=lane?110:124;const [tx,ty]=P(p.l,r);const [mx,my]=P(p.l,140),[nx,ny]=P(p.l,135);
+      E('line',{x1:mx,y1:my,x2:nx,y2:ny,stroke:C.accent,'stroke-width':1.4},g);
+      const big=p.k==='Sol'||p.k==='Luna';
+      E('text',{x:tx,y:ty+5,'text-anchor':'middle','font-family':'Noto Sans Symbols, Segoe UI Symbol, sans-serif','font-size':big?15:13,fill:big?C.accent:C.ink},g,PGL[p.k]+'︎');});}
+  drawEnneagram(E('g',{},svg),72,o.type,C,{labels:true});
+}
+
+/* ================= ESTADO ================= */
+// Lo que se guarda en el navegador: {n nombre, e email, t, w, i, s[9], u, h, la, lo, c}
+let S=store.get('astrotipo',{})||{};
+const save=()=>store.set('astrotipo',S);
+const ans=new Array(QUIZ.length).fill(null);let qi=0;
+const $=id=>document.getElementById(id);
+const screens=['sLanding','sQuiz','sBirth','sEmail','sLoading','sResult','sReport','sError'];
+function show(id){screens.forEach(s=>$(s).hidden=s!==id);window.scrollTo(0,0);}
+const b64url=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const fromB64url=s=>{const b=s.replace(/-/g,'+').replace(/_/g,'/');return JSON.parse(decodeURIComponent(escape(atob(b+'==='.slice((b.length+3)%4)))));};
+const fmtDeg=p=>p.g+'°'+String(p.m).padStart(2,'0')+'′';
+const pad=n=>String(n).padStart(2,'0');
+const money=n=>'$'+n.toLocaleString('es-AR');
+// Token que viaja a Mercado Pago (máximo 256 caracteres)
+function token(){
+  const base={n:S.n,t:S.t,w:S.w,i:S.i,u:S.u,h:S.h,la:S.la,lo:S.lo};
+  for(const extra of [{e:S.e,c:S.c},{e:S.e},{}]){const tk=b64url(Object.assign({},base,extra));if(tk.length<=250)return tk;}
+  return b64url(base);
+}
+function perfilCarta(){return chart({u:S.u,conHora:S.h===1,la:S.la,lo:S.lo});}
+function birthLine(){
+  const local=new Date(S.u*60000);const parts=[];
+  // Fecha y hora local según la zona de la ciudad elegida (guardada en S.d)
+  parts.push(S.d||local.toISOString().slice(0,10));
+  parts.push(S.h===1?(S.hm||''):'sin hora');
+  if(S.c)parts.push(S.c);
+  parts.push(Math.abs(S.la).toFixed(2)+'°'+(S.la<0?'S':'N')+' '+Math.abs(S.lo).toFixed(2)+'°'+(S.lo<0?'O':'E'));
+  return parts.filter(Boolean);
+}
+
+/* ================= CABECERA E INICIO ================= */
+function paintStatic(){
+  const C=palette();
+  const ml=$('miniLogo');ml.innerHTML='';E('circle',{r:44,fill:'none',stroke:C.ink,'stroke-width':3},ml);drawEnneagram(E('g',{},ml),30,null,C,{dots:false,sw:3,ringColor:'transparent',op:1});
+  try{const {puntos}=positionsAt(new Date());drawWheel($('heroWheel'),{puntos,type:null},C);
+    $('heroCap').textContent='El cielo de hoy · Sol en '+puntos.Sol.signo+' '+puntos.Sol.g+'° · Luna en '+puntos.Luna.signo+' '+puntos.Luna.g+'°';}catch(e){}
+}
+paintStatic();
+$('homeBtn').onclick=()=>show('sLanding');
+document.querySelectorAll('[data-go="quiz"]').forEach(b=>b.onclick=()=>{qi=Math.max(0,ans.indexOf(null));renderQ();show('sQuiz');ga('test_start');});
+
+/* ================= TEST ================= */
+function renderQ(){const q=QUIZ[qi];
+  $('qCount').textContent=(qi+1)+' de '+QUIZ.length;$('qBar').style.width=(qi/QUIZ.length*100)+'%';
+  $('qSection').textContent=q.kind==='i'?'Hacia dónde va tu energía':'Parte 1 · Tus reacciones';
+  $('qText').textContent=q.s;$('qBack').hidden=qi===0;
+  const box=$('qOpts');box.innerHTML='';
+  q.keys.forEach((k,i)=>{const b=document.createElement('button');b.type='button';b.className='opt'+(String(ans[qi])===String(k)?' sel':'');
+    b.innerHTML='<span class="k">'+'ABC'[i]+'</span><span></span>';b.lastChild.textContent=q.o[k];
+    b.onclick=()=>{ans[qi]=q.kind==='t'?Number(k):k;b.classList.add('sel');box.querySelectorAll('button').forEach(x=>x.disabled=true);
+      setTimeout(()=>{if(qi<QUIZ.length-1){qi++;renderQ();window.scrollTo(0,0);}else{$('qBar').style.width='100%';Object.assign(S,score(ans));save();ga('quiz_done');show('sBirth');}},180);};
+    box.appendChild(b);});}
+$('qBack').onclick=()=>{if(qi>0){qi--;renderQ();}};
+
+/* ================= NACIMIENTO ================= */
+const MONTHS=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+function opt(sel,v,t){const o=document.createElement('option');o.value=v;o.textContent=t;sel.appendChild(o);}
+opt($('bDay'),'','Día');for(let i=1;i<=31;i++)opt($('bDay'),i,i);
+opt($('bMonth'),'','Mes');MONTHS.forEach((m,i)=>opt($('bMonth'),i+1,m[0].toUpperCase()+m.slice(1)));
+opt($('bYear'),'','Año');for(let y=new Date().getFullYear()-10;y>=1925;y--)opt($('bYear'),y,y);
+opt($('bHour'),'','Hora');for(let i=0;i<24;i++)opt($('bHour'),i,pad(i)+' h');
+opt($('bMin'),'','Min');for(let i=0;i<60;i++)opt($('bMin'),i,pad(i));
+$('bNoTime').onchange=e=>{$('bHour').disabled=$('bMin').disabled=e.target.checked;$('timeHelp').textContent=e.target.checked?'Sin hora calculamos Sol, Luna y planetas. El Ascendente queda afuera.':'Con la hora sumamos tu Ascendente. Si no la sabés, el resto de la carta sale igual.';};
+const fold=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+let city=null,hiIdx=-1,matches=[],searchTimer=null,searchCtrl=null;
+const coord=c=>Math.abs(c.lat).toFixed(1)+'°'+(c.lat<0?'S':'N')+' '+Math.abs(c.lon).toFixed(1)+'°'+(c.lon<0?'O':'E');
+function renderSugg(emptyMsg){const ul=$('citySugg');ul.innerHTML='';
+  if(!matches.length&&emptyMsg){ul.hidden=false;const li=document.createElement('li');li.className='empty';li.textContent=emptyMsg;ul.appendChild(li);return;}
+  ul.hidden=!matches.length;$('bCity').setAttribute('aria-expanded',String(!!matches.length));
+  matches.forEach((c,i)=>{const li=document.createElement('li');li.setAttribute('role','option');if(i===hiIdx)li.className='on';li.innerHTML='<span></span><small></small>';li.firstChild.textContent=c.nombre+', '+c.region;li.lastChild.textContent=coord(c);
+    li.onmousedown=ev=>{ev.preventDefault();pick(c);};ul.appendChild(li);});}
+function pick(c){city=c;$('bCity').value=c.nombre+', '+c.region;matches=[];renderSugg();$('cityChosen').textContent=coord(c)+' · zona horaria '+c.tz.split('/').pop().replace(/_/g,' ');}
+function localSearch(q){return CITIES_FALLBACK.filter(c=>fold(c.nombre+' '+c.region).includes(q)).slice(0,8);}
+$('bCity').addEventListener('input',e=>{city=null;$('cityChosen').textContent='';hiIdx=-1;const q=fold(e.target.value.trim());
+  clearTimeout(searchTimer);if(searchCtrl)searchCtrl.abort();
+  if(q.length<2){matches=[];renderSugg();return;}
+  searchTimer=setTimeout(async()=>{searchCtrl=new AbortController();
+    try{const r=await fetch('/api/ciudades?q='+encodeURIComponent(q),{signal:searchCtrl.signal});if(!r.ok)throw 0;const j=await r.json();matches=j.ciudades||[];}
+    catch(err){if(err&&err.name==='AbortError')return;matches=localSearch(q);}
+    renderSugg(matches.length?null:'No encontramos esa ciudad. Probá con la más cercana.');},220);});
+$('bCity').addEventListener('keydown',e=>{if(!matches.length)return;if(e.key==='ArrowDown'){hiIdx=(hiIdx+1)%matches.length;renderSugg();e.preventDefault();}else if(e.key==='ArrowUp'){hiIdx=(hiIdx-1+matches.length)%matches.length;renderSugg();e.preventDefault();}else if(e.key==='Enter'){if(hiIdx<0)hiIdx=0;pick(matches[hiIdx]);e.preventDefault();}});
+$('bCity').addEventListener('blur',()=>setTimeout(()=>{matches=[];renderSugg();},150));
+$('birthForm').addEventListener('submit',e=>{e.preventDefault();const err=$('birthErr');
+  const d=+$('bDay').value,mo=+$('bMonth').value,y=+$('bYear').value,nt=$('bNoTime').checked;
+  let msg='';if(!d||!mo||!y)msg='Completá día, mes y año.';else if(new Date(Date.UTC(y,mo-1,d)).getUTCDate()!==d)msg='Esa fecha no existe. Revisá el día y el mes.';
+  else if(!nt&&($('bHour').value===''||$('bMin').value===''))msg='Elegí la hora y los minutos, o marcá "No sé mi hora".';else if(!city)msg='Escribí tu ciudad y elegila de la lista.';
+  err.hidden=!msg;err.textContent=msg;if(msg)return;
+  const h=nt?12:+$('bHour').value,mi=nt?0:+$('bMin').value;
+  Object.assign(S,{u:Math.round(localToUTC(y,mo,d,h,mi,city.tz)/60000),h:nt?0:1,la:city.lat,lo:city.lon,c:(city.nombre).slice(0,30),d:pad(d)+'/'+pad(mo)+'/'+y,hm:nt?'':pad(h)+':'+pad(mi)});save();
+  if(S.n)$('uName').value=S.n;if(S.e)$('uEmail').value=S.e;
+  show('sEmail');});
+
+/* ================= EMAIL ================= */
+$('emailForm').addEventListener('submit',e=>{e.preventDefault();const n=$('uName').value.trim(),m=$('uEmail').value.trim(),err=$('emailErr');
+  let msg='';if(!n)msg='Escribí tu nombre.';else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m))msg='Revisá el email: tiene que ser del tipo nombre@correo.com.';
+  err.hidden=!msg;err.textContent=msg;if(msg)return;
+  S.n=n.replace(/[<>]/g,'').slice(0,40);S.e=m.toLowerCase();save();
+  // Link para volver desde los emails sin repetir el test
+  const r=b64url({n:S.n,t:S.t,w:S.w,i:S.i,s:S.s,u:S.u,h:S.h,la:S.la,lo:S.lo,c:S.c,d:S.d,hm:S.hm});
+  fetch('/api/save_lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:S.e,nombre:S.n,r})}).catch(()=>{});
+  ga('generate_lead');fb('Lead');
+  runLoading(['Ubicando el cielo de tu nacimiento','Calculando Sol, Luna y planetas','Comparando los 9 eneatipos','Detectando tu ala y tu instinto','Cruzando tu carta con tu eneatipo'],'Armando tu mapa',showResult);});
+
+function runLoading(steps,title,done){show('sLoading');$('loadTitle').textContent=title;const svg=$('loadSvg');svg.innerHTML='';drawEnneagram(svg,92,null,palette(),{cls:'draw',sw:1.4,dots:false});
+  const ul=$('ticks');ul.innerHTML='';steps.forEach(s=>{const li=document.createElement('li');li.textContent=s;ul.appendChild(li);});
+  const lis=[...ul.children];lis.forEach((l,i)=>setTimeout(()=>l.classList.add('done'),450*(i+1)));if(done)setTimeout(done,450*lis.length+500);}
+
+/* ================= ADELANTO + PAGO ================= */
+function fallbackPreview(ch){const st=SIGNTXT[ch.puntos.Sol.i],lu=SIGNTXT[ch.puntos.Luna.i],ctr=CENTRO[S.t];
+  return 'Tu Sol en '+ch.puntos.Sol.signo+' habla de '+st.sol+'. Con la Luna en '+(ch.lunaAlt?ch.lunaAlt.join(' o '):ch.puntos.Luna.signo)+', '+lu.luna+'. En tu carta predomina el elemento '+ELEM[ch.dom]+'. '+CTRTXT[ctr][ch.dom];}
+function showResult(notice){
+  const ch=perfilCarta();
+  $('rTitle').textContent=S.n+', este es tu cielo';
+  $('rData').innerHTML='';birthLine().forEach(t=>{const s=document.createElement('span');s.textContent=t;$('rData').appendChild(s);});
+  $('rNotice').hidden=!notice;if(notice)$('rNotice').textContent=notice;
+  const sky=$('rSky');sky.innerHTML='';
+  const cell=(lbl,p,alt,note)=>{const d=document.createElement('div');d.innerHTML='<span class="label"></span><span class="sg"></span><span class="deg"></span>';d.children[0].textContent=lbl;
+    if(p){d.children[1].innerHTML='<span class="sym"></span><span></span>';d.children[1].children[0].textContent=SGL[p.i];d.children[1].children[1].textContent=alt||p.signo;d.children[2].textContent=note||fmtDeg(p);}
+    else{d.children[1].textContent='—';d.children[2].textContent=note;}sky.appendChild(d);};
+  cell('Sol',ch.puntos.Sol);cell('Luna',ch.puntos.Luna,ch.lunaAlt?ch.lunaAlt.join(' o '):null,ch.lunaAlt?'Cambió de signo ese día':null);cell('Ascendente',ch.asc,null,ch.asc?null:'Necesita la hora');
+  const el=$('rElems');el.innerHTML='';ch.elementos.forEach((v,i)=>{const r=document.createElement('div');r.className='el'+(i===ch.dom?' top':'');r.innerHTML='<span></span><span class="track"><i></i></span><span class="pct"></span>';r.children[0].textContent=ELEM[i];r.querySelector('i').style.width=v+'%';r.children[2].textContent=v+'%';el.appendChild(r);});
+  // Adelanto escrito por la IA (con texto de respaldo)
+  const pv=$('rPreview');const cacheKey='adelanto_'+S.t+S.w+S.i+S.u;const cached=store.get(cacheKey,null);
+  if(cached){pv.textContent=cached;pv.classList.remove('wait');}
+  else{pv.textContent='Escribiendo tu adelanto…';pv.classList.add('wait');
+    const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),22000);
+    fetch('/api/adelanto',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:token()}),signal:ctrl.signal})
+      .then(r=>r.ok?r.json():Promise.reject()).then(j=>{if(!j.adelanto)throw 0;pv.textContent=j.adelanto;store.set(cacheKey,j.adelanto);})
+      .catch(()=>{pv.textContent=fallbackPreview(ch);}).finally(()=>{clearTimeout(to);pv.classList.remove('wait');});}
+  const locks=$('rLocks');locks.innerHTML='';
+  // El resultado real nunca se escribe en esta pantalla: solo un relleno borroso
+  [['Tu eneatipo','Tipo ? · El ••••••••'],['Tu ala y tu instinto','Ala ? · ••••••'],['Tu cruce clave','Tu tipo × tu Luna'],['Tu tipo más compatible','Tipo ? · El ••••••']].forEach(([k,v])=>{
+    const d=document.createElement('div');d.className='lock';d.innerHTML='<span class="label"></span><span class="v"><span aria-hidden="true"></span></span><span class="k">Bloqueado</span>';d.children[0].textContent=k;d.querySelector('.v span').textContent=v;locks.appendChild(d);});
+  const scs=$('rScores');scs.innerHTML='';(S.s||[]).slice().sort((a,b)=>b-a).forEach(v=>{const r=document.createElement('div');r.className='sc';r.innerHTML='<span class="muted">Tipo ?</span><span class="track"><i></i></span><span class="n"></span>';r.querySelector('i').style.width=v+'%';r.children[2].textContent=v;scs.appendChild(r);});
+  $('priceTxt').textContent=money(CONFIG.precio);$('payErr').hidden=true;$('payBtn').disabled=false;$('payBtn').textContent='Desbloquear mi reporte';
+  show('sResult');
+  if(once('view_paywall_'+S.u+S.t))ga('view_paywall');
+}
+$('payBtn').onclick=async()=>{const btn=$('payBtn'),err=$('payErr');err.hidden=true;btn.disabled=true;btn.textContent='Abriendo Mercado Pago…';
+  ga('begin_checkout',{value:CONFIG.precio,currency:'ARS'});fb('InitiateCheckout',{value:CONFIG.precio,currency:'ARS',num_items:1});
+  try{const r=await fetch('/api/mp_create_preference',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:token()})});
+    const j=await r.json().catch(()=>({}));if(!r.ok||!j.init_point)throw new Error(j.error||'');
+    window.location.href=j.init_point;}
+  catch(e){btn.disabled=false;btn.textContent='Desbloquear mi reporte';err.hidden=false;err.textContent='No pudimos abrir Mercado Pago. Probá de nuevo en unos segundos.';}};
+
+/* ================= REPORTE ================= */
+function renderReport(j){
+  const p=j.perfil,ch=j.carta;
+  $('pTitle').textContent='El mapa de '+p.nombre;
+  const bd=$('pBadges');bd.innerHTML='';
+  const luna=ch.lunaAlt?ch.lunaAlt.join('/'):ch.puntos.Luna.signo;
+  [['Tipo '+p.eneatipo+' · '+TYPENAME[p.eneatipo],1],['Ala '+p.ala],[p.instintoNombre],['Sol '+ch.puntos.Sol.signo,1],['Luna '+luna],ch.asc?['Asc '+ch.asc.signo]:null].filter(Boolean).forEach(([t,on])=>{const s=document.createElement('span');s.className='badge'+(on?' on':'');s.textContent=t;bd.appendChild(s);});
+  $('pData').innerHTML='';
+  if(S.u===p.u){birthLine().forEach(t=>{const s=document.createElement('span');s.textContent=t;$('pData').appendChild(s);});}
+  else if(p.ciudad){const s=document.createElement('span');s.textContent=p.ciudad;$('pData').appendChild(s);}
+  drawWheel($('pWheel'),{puntos:ch.puntos,ascLon:ch.asc?ch.asc.lon:null,mcLon:ch.mc?ch.mc.lon:null,type:p.eneatipo});
+  $('pAI').innerHTML=j.reporte; // HTML ya filtrado en el servidor
+  const tb=$('pPlanets');tb.innerHTML='';
+  const rows=Object.keys(ch.puntos).map(k=>[k,ch.puntos[k]]);if(ch.asc)rows.push(['Ascendente',ch.asc]);if(ch.mc)rows.push(['Medio Cielo',ch.mc]);
+  rows.forEach(([k,pt])=>{const tr=document.createElement('tr');tr.innerHTML='<td><span class="sym"></span> <span></span></td><td></td><td class="pos"></td><td></td>';
+    tr.children[0].children[0].textContent=PGL[k]?PGL[k]+'︎':'';tr.children[0].children[1].textContent=k;tr.children[1].textContent=(k==='Luna'&&ch.lunaAlt)?ch.lunaAlt.join(' o '):pt.signo;tr.children[2].textContent=fmtDeg(pt);
+    tr.children[3].textContent=PLMEAN[k]||(k==='Ascendente'?'Cómo te ven y cómo llegás a los demás':'Tu vocación y tu imagen pública');
+    if(['Urano','Neptuno','Plutón'].includes(k)){const s=document.createElement('div');s.className='gen';s.textContent='Planeta lento: lo compartís con tu generación.';tr.children[3].appendChild(s);}tb.appendChild(tr);});
+  const copy=$('emailCopy');copy.hidden=!j.email_copia;if(j.email_copia)copy.textContent='Te mandamos una copia de este reporte a '+j.email_copia+'. Si no la ves, revisá Spam o Promociones.';
+  window.__report=j;
+  show('sReport');
+}
+
+// Regreso desde Mercado Pago
+async function handleReturn(p){
+  const status=(p.get('collection_status')||p.get('status')||'').toLowerCase();
+  const paymentId=p.get('payment_id')||p.get('collection_id')||'';
+  history.replaceState(null,'',location.pathname);
+  if(status!=='approved'||!/^\d+$/.test(paymentId)){
+    if(S.t&&S.u!=null){showResult(status==='pending'||status==='in_process'?'Tu pago quedó pendiente en Mercado Pago. Cuando se apruebe, te llega el reporte por email.':'El pago no se completó. Podés intentarlo de nuevo cuando quieras.');}
+    return;}
+  const cached=store.get('reporte_'+paymentId,null);
+  if(cached){renderReport(cached);return;}
+  runLoading(['Confirmando tu pago','Calculando tu carta natal','Cruzando tu carta con tu eneatipo','Escribiendo tu reporte'],'Preparando tu reporte');
+  const lis=[...$('ticks').children];let k=0;const tick=setInterval(()=>{if(k<lis.length-1)lis[k++].classList.add('done');},6000);
+  try{
+    const r=await fetch('/api/mp_verify_and_report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({payment_id:paymentId,enviar_email:!store.get('email_'+paymentId,false)})});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok||!j.reporte)throw new Error(j.error||'sin reporte');
+    store.set('email_'+paymentId,true);
+    // Se guarda para que, si recarga la página, no se vuelva a generar
+    try{localStorage.setItem('reporte_'+paymentId,JSON.stringify(j));}catch(e){}
+    if(once('purchase_'+paymentId)){ga('purchase',{transaction_id:paymentId,value:CONFIG.precio,currency:'ARS'});fb('Purchase',{value:CONFIG.precio,currency:'ARS'});}
+    renderReport(j);
+  }catch(e){
+    $('errText').textContent='Recibimos tu pago, pero no pudimos mostrar tu reporte en este momento. Igual te va a llegar por email en los próximos minutos. Si no llega, escribinos a '+CONFIG.contacto+' con tu número de operación de Mercado Pago ('+paymentId+') y te lo enviamos.';
+    show('sError');
+  }finally{clearInterval(tick);}
+}
+
+/* ================= PDF ================= */
+$('pdfBtn').onclick=async()=>{
+  const msg=$('pdfMsg'),btn=$('pdfBtn');
+  if(!window.jspdf||!window.html2canvas){msg.textContent='Todavía se está cargando. Probá en unos segundos.';return;}
+  btn.disabled=true;msg.textContent='Generando el PDF…';
+  const wrap=document.createElement('div');
+  // El PDF siempre sale en colores claros
+  wrap.style.cssText='position:fixed;left:-100000px;top:0;width:794px;padding:36px;box-sizing:border-box;--paper:#FFFFFF;--surface:#F8F9FB;--ink:#14213D;--muted:#566079;--line:#C8CFDB;--accent:#B23A2C;--soft:#E2E7EF;background:#FFFFFF;color:#14213D;';
+  const clone=$('pdfArea').cloneNode(true);clone.removeAttribute('id');
+  clone.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));
+  wrap.appendChild(clone);document.body.appendChild(wrap);
+  try{
+    const j=window.__report;const ch=j.carta;
+    const svg=clone.querySelector('svg.wheel');drawWheel(svg,{puntos:ch.puntos,ascLon:ch.asc?ch.asc.lon:null,mcLon:ch.mc?ch.mc.lon:null,type:j.perfil.eneatipo},LIGHT);
+    svg.style.maxWidth='320px';
+    await new Promise(r=>setTimeout(r,250));
+    const scale=2;
+    // Cortes de página: entre bloques, nunca en medio de un párrafo, y cada título pegado a lo que sigue.
+    // Se miden en la copia que dibuja html2canvas (ancho 794), que es la que va al PDF.
+    wrap.id='pdfTemp';
+    const medir=w=>{const base=w.getBoundingClientRect();
+      const piezas=[w.querySelector('.cover'),...w.querySelectorAll('.ai > *'),...w.querySelectorAll('.rsec > .label, thead, tbody tr')].filter(Boolean);
+      const unidades=[];let titulo=null;
+      piezas.forEach(el=>{const r=el.getBoundingClientRect();const u={top:Math.round((r.top-base.top)*scale),bottom:Math.round((r.bottom-base.top)*scale)};
+        if(u.bottom<=u.top)return;
+        if(titulo){u.top=Math.min(u.top,titulo.top);titulo=null;}
+        if(/^H[1-6]$/.test(el.tagName)||el.tagName==='THEAD'||el.classList.contains('label')){titulo=u;return;}
+        unidades.push(u);});
+      unidades.sort((a,b)=>a.top-b.top);const c=[];for(let k=0;k<unidades.length-1;k++)if(unidades[k+1].top>=unidades[k].bottom)c.push(Math.round((unidades[k].bottom+unidades[k+1].top)/2));return c;};
+    let cortes=[];
+    const canvas=await html2canvas(wrap,{scale,backgroundColor:'#FFFFFF',logging:false,windowWidth:794,onclone:doc=>{try{const w=doc.getElementById('pdfTemp');if(w)cortes=medir(w);}catch(e){}}});
+    if(!cortes.length)cortes=medir(wrap);
+    const {jsPDF}=window.jspdf;const pdf=new jsPDF('p','mm','a4');const m=12,W=pdf.internal.pageSize.getWidth()-m*2,H=pdf.internal.pageSize.getHeight()-m*2;
+    const pxPerMm=canvas.width/W,pageH=Math.floor(H*pxPerMm);let y=0,first=true;
+    while(y<canvas.height){let end=Math.min(y+pageH,canvas.height);if(end<canvas.height){let best=null;for(const c of cortes)if(c>y+pageH*.3&&c<=end)best=c;if(best)end=best;}
+      const pc=document.createElement('canvas');pc.width=canvas.width;pc.height=end-y;const cx=pc.getContext('2d');cx.fillStyle='#FFFFFF';cx.fillRect(0,0,pc.width,pc.height);cx.drawImage(canvas,0,y,canvas.width,end-y,0,0,canvas.width,end-y);
+      if(!first)pdf.addPage();pdf.addImage(pc.toDataURL('image/jpeg',.95),'JPEG',m,m,W,(end-y)/pxPerMm);y=end;first=false;}
+    pdf.save('Astrotipo_'+(j.perfil.nombre||'reporte').replace(/[^A-Za-z0-9_-]/g,'')+'.pdf');
+    msg.textContent='PDF descargado.';
+  }catch(e){console.error(e);msg.textContent='No se pudo generar el PDF. Probá desde Chrome o Safari.';}
+  finally{wrap.remove();btn.disabled=false;}
+};
+
+/* ================= AL ENTRAR ================= */
+(function boot(){
+  const p=new URLSearchParams(location.search);
+  if(p.get('mp_return')||p.get('payment_id')||p.get('collection_id')){handleReturn(p);return;}
+  // Link desde los emails: vuelve a la pantalla de pago sin repetir el test
+  const r=p.get('r');
+  if(r){try{const d=fromB64url(r);
+      if(d.t>=1&&d.t<=9&&d.w>=1&&d.w<=9&&INSTN[d.i]&&Number.isFinite(+d.u)&&Array.isArray(d.s)){
+        const prevEmail=S.e;S={n:String(d.n||'').slice(0,40),e:prevEmail||'',t:+d.t,w:+d.w,i:d.i,s:d.s.map(Number).slice(0,9),u:+d.u,h:d.h===1?1:0,la:+d.la,lo:+d.lo,c:String(d.c||'').slice(0,30),d:String(d.d||'').slice(0,10),hm:String(d.hm||'').slice(0,5)};save();
+        const keep=new URLSearchParams(location.search);keep.delete('r');const q=keep.toString();history.replaceState(null,'',location.pathname+(q?'?'+q:''));
+        ga('email_return');showResult();return;}
+    }catch(e){}}
+})();
+
+// Si cambia el tema del sistema, se redibujan las ruedas con los colores nuevos
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{paintStatic();if(!$('sReport').hidden&&window.__report){const j=window.__report;drawWheel($('pWheel'),{puntos:j.carta.puntos,ascLon:j.carta.asc?j.carta.asc.lon:null,mcLon:j.carta.mc?j.carta.mc.lon:null,type:j.perfil.eneatipo});}});}catch(e){}
+})();
+</script>
+</body>
+</html>

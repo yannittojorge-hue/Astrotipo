@@ -1,0 +1,8 @@
+{
+  "name": "astrotipo",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "astronomy-engine": "2.1.19"
+  }
+}

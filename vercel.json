@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/mp_verify_and_report.js": { "maxDuration": 60 },
+    "api/mp_webhook.js": { "maxDuration": 60 },
+    "api/adelanto.js": { "maxDuration": 30 }
+  }
+}
