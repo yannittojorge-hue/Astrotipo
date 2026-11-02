@@ -24,6 +24,9 @@ export default async function handler(req, res) {
   const ok = await guardarContacto(String(email), {
     NOMBRE: String(nombre).trim().slice(0, 60),
     ASTRO_LINK: link,
+    // Arranca (o reinicia) el seguimiento por email: ver _seguimiento.js
+    ASTRO_FECHA: new Date(Date.now() - 3 * 3600000).toISOString().slice(0, 10),
+    ASTRO_PASO: 0,
   }, listId ? [listId] : undefined);
 
   // Nunca bloquea a la persona: si Brevo falla, queda en los logs de Vercel
