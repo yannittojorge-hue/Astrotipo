@@ -191,6 +191,22 @@ select:disabled{opacity:.45}
 .price b{font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums}
 .price small{font-size:.74rem;color:var(--muted)}
 .payerr{padding-bottom:10px;font-size:.88rem}
+/* Pago integrado (Payment Brick de Mercado Pago) */
+.paysheet{position:fixed;inset:0;z-index:40;background:rgba(10,16,32,.55);display:flex;align-items:flex-end;justify-content:center}
+.paysheet .box{background:#FFFFFF;color:#14213D;width:100%;max-width:560px;max-height:94vh;overflow:auto;border-radius:18px 18px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+@media (min-width:640px){.paysheet{align-items:center}.paysheet .box{border-radius:18px;padding:24px}}
+.paysheet .top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px}
+.paysheet h3{font-size:1.4rem;color:#14213D}
+.paysheet .sum{display:flex;justify-content:space-between;align-items:baseline;border:1px solid #C8CFDB;border-radius:12px;padding:12px 14px;margin:12px 0 4px;font-size:.95rem;color:#3A4256}
+.paysheet .sum b{font-size:1.15rem;color:#14213D}
+.paysheet .x{background:none;border:0;font-size:1.6rem;line-height:1;cursor:pointer;color:#566079;padding:2px 6px}
+.paysheet .trust{font-size:.82rem;color:#566079;margin-top:10px;line-height:1.5}
+.paysheet .msg{border-radius:10px;padding:10px 12px;margin:10px 0 0;font-size:.92rem}
+.paysheet .msg.bad{background:#FDECEA;color:#8A2418}
+.paysheet .msg.wait{background:#EEF2F8;color:#14213D}
+.paysheet .alt{margin-top:12px;font-size:.88rem;color:#566079;text-align:center}
+.paysheet .alt button{color:#B23A2C}
+#brickBox{min-height:120px}
 .spacer{height:120px}
 
 /* REPORTE */
@@ -454,6 +470,16 @@ td .gen{font-size:.76rem;color:var(--muted)}
     <button class="btn" type="button" id="payBtn">Desbloquear mi reporte</button>
   </div>
   <div class="wrap"><p class="err payerr" id="payErr" hidden></p></div></div>
+  <div class="paysheet" id="paySheet" hidden role="dialog" aria-modal="true" aria-labelledby="payTitle">
+    <div class="box">
+      <div class="top"><h3 id="payTitle">Desbloqueá tu reporte</h3><button class="x" type="button" id="payClose" aria-label="Cerrar">×</button></div>
+      <div class="sum"><span>Reporte Astrotipo completo</span><b id="paySum"></b></div>
+      <p class="msg bad" id="payMsg" hidden></p>
+      <div id="brickBox"></div>
+      <p class="trust">Pago procesado por Mercado Pago. No guardamos los datos de tu tarjeta. Pago único, sin suscripciones · Garantía de 7 días.</p>
+      <p class="alt">¿Preferís pagar en la página de Mercado Pago? <button class="linkbtn" type="button" id="payRedirect">Ir a Mercado Pago</button></p>
+    </div>
+  </div>
 </main>
 
 <!-- ============ REPORTE ============ -->
@@ -818,12 +844,65 @@ function showResult(notice){
   show('sResult');
   if(once('view_paywall_'+S.u+S.t)){ga('view_paywall');fb('ViewContent',{content_name:'Reporte Astrotipo',value:CONFIG.precio,currency:'ARS'});}
 }
-$('payBtn').onclick=async()=>{const btn=$('payBtn'),err=$('payErr');err.hidden=true;btn.disabled=true;btn.textContent='Abriendo Mercado Pago…';
-  ga('begin_checkout',{value:CONFIG.precio,currency:'ARS'});fb('InitiateCheckout',{value:CONFIG.precio,currency:'ARS',num_items:1});
+// Pago integrado (Payment Brick de Mercado Pago). En prueba: se activa entrando con ?pago=nuevo
+// (queda recordado en este navegador; ?pago=viejo lo desactiva).
+const PAGO_NUEVO=(()=>{try{const q=new URLSearchParams(location.search).get('pago');
+  if(q==='nuevo')localStorage.setItem('pago_nuevo','1');if(q==='viejo')localStorage.removeItem('pago_nuevo');
+  return localStorage.getItem('pago_nuevo')==='1';}catch(e){return false;}})();
+function marcarInicioPago(){ga('begin_checkout',{value:CONFIG.precio,currency:'ARS'});fb('InitiateCheckout',{value:CONFIG.precio,currency:'ARS',num_items:1});}
+async function irAMercadoPago(yaMarcado){const btn=$('payBtn'),err=$('payErr');err.hidden=true;btn.disabled=true;btn.textContent='Abriendo Mercado Pago…';
+  if(!yaMarcado)marcarInicioPago();
   try{const r=await fetch('/api/mp_create_preference',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:token()})});
     const j=await r.json().catch(()=>({}));if(!r.ok||!j.init_point)throw new Error(j.error||'');
     window.location.href=j.init_point;}
-  catch(e){btn.disabled=false;btn.textContent='Desbloquear mi reporte';err.hidden=false;err.textContent='No pudimos abrir Mercado Pago. Probá de nuevo en unos segundos.';}};
+  catch(e){btn.disabled=false;btn.textContent='Desbloquear mi reporte';err.hidden=false;err.textContent='No pudimos abrir Mercado Pago. Probá de nuevo en unos segundos.';}}
+let brickCtl=null,mpSdk=null;
+function cargarSdkMp(){return mpSdk||(mpSdk=new Promise((ok,ko)=>{if(window.MercadoPago)return ok();const s=document.createElement('script');s.src='https://sdk.mercadopago.com/js/v2';s.onload=()=>ok();s.onerror=()=>{mpSdk=null;ko(new Error('No cargó Mercado Pago'));};document.head.appendChild(s);}));}
+function mensajePago(t){const m=$('payMsg');m.hidden=!t;m.textContent=t||'';}
+async function cerrarPago(){$('paySheet').hidden=true;document.body.style.overflow='';if(brickCtl){try{await brickCtl.unmount();}catch(e){}brickCtl=null;}}
+async function montarBrick(publicKey){
+  if(brickCtl){try{await brickCtl.unmount();}catch(e){}brickCtl=null;}
+  $('brickBox').innerHTML='';
+  const mp=new MercadoPago(publicKey,{locale:'es-AR'});
+  // La preferencia habilita la opción "Cuenta de Mercado Pago" dentro del formulario
+  let prefId=null;try{const r=await fetch('/api/mp_create_preference',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:token()})});const j=await r.json();prefId=j.preference_id||null;}catch(e){}
+  brickCtl=await mp.bricks().create('payment','brickBox',{
+    initialization:Object.assign({amount:CONFIG.precio,payer:{email:S.e||''}},prefId?{preferenceId:prefId}:{}),
+    customization:{paymentMethods:Object.assign({creditCard:'all',debitCard:'all'},prefId?{mercadoPago:'all'}:{}),visual:{style:{theme:'default'}}},
+    callbacks:{
+      onReady:()=>{},
+      onError:e=>{console.error('Payment Brick',e);},
+      onSubmit:({selectedPaymentMethod,formData})=>new Promise(async(resolve,reject)=>{
+        mensajePago('');
+        if(selectedPaymentMethod==='wallet_purchase'){resolve();return;} // Mercado Pago sigue en su app o página y vuelve acá
+        try{
+          const r=await fetch('/api/mp_pay',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:token(),formData})});
+          const j=await r.json().catch(()=>({}));
+          if(!r.ok)throw new Error(j.error||'No se pudo procesar el pago. Probá de nuevo.');
+          if(j.status==='approved'){resolve();await cerrarPago();entregarReporte(String(j.id));return;}
+          if(j.status==='in_process'||j.status==='pending'){resolve();await cerrarPago();showResult('Tu pago quedó en revisión en Mercado Pago. Apenas se apruebe, te llega el reporte por email.');return;}
+          throw new Error(j.mensaje||'El pago fue rechazado. Probá con otra tarjeta o con tu cuenta de Mercado Pago.');
+        }catch(e){mensajePago(e.message);reject();}
+      })
+    }
+  });
+}
+async function abrirPagoIntegrado(){
+  const btn=$('payBtn');$('payErr').hidden=true;marcarInicioPago();
+  btn.disabled=true;btn.textContent='Abriendo el pago…';
+  try{
+    const [cfg]=await Promise.all([fetch('/api/mp_config').then(r=>r.json()),cargarSdkMp()]);
+    if(!cfg||!cfg.publicKey)throw new Error('Falta la clave pública');
+    $('paySum').textContent=money(CONFIG.precio);mensajePago('');
+    $('paySheet').hidden=false;document.body.style.overflow='hidden';
+    await montarBrick(cfg.publicKey);
+    btn.disabled=false;btn.textContent='Desbloquear mi reporte';
+  }catch(e){console.error(e);await cerrarPago();irAMercadoPago(true);} // si algo falla, sigue el pago de siempre
+}
+$('payBtn').onclick=()=>PAGO_NUEVO?abrirPagoIntegrado():irAMercadoPago();
+$('payClose').onclick=()=>cerrarPago();
+$('payRedirect').onclick=async()=>{await cerrarPago();irAMercadoPago(true);};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('paySheet').hidden)cerrarPago();});
 
 /* ================= REPORTE ================= */
 function renderReport(j){
@@ -856,6 +935,9 @@ async function handleReturn(p){
   if(status!=='approved'||!/^\d+$/.test(paymentId)){
     if(S.t&&S.u!=null){showResult(status==='pending'||status==='in_process'?'Tu pago quedó pendiente en Mercado Pago. Cuando se apruebe, te llega el reporte por email.':'El pago no se completó. Podés intentarlo de nuevo cuando quieras.');}
     return;}
+  entregarReporte(paymentId);
+}
+async function entregarReporte(paymentId){
   const cached=store.get('reporte_'+paymentId,null);
   if(cached){renderReport(cached);return;}
   runLoading(['Confirmando tu pago','Calculando tu carta natal','Cruzando tu carta con tu eneatipo','Escribiendo tu reporte'],'Preparando tu reporte');

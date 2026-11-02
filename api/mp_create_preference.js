@@ -14,7 +14,12 @@ export default async function handler(req, res) {
   const mpAccessToken = process.env.MP_ACCESS_TOKEN;
   if (!mpAccessToken) return res.status(500).json({ error: "Falta MP_ACCESS_TOKEN en Vercel" });
 
+  // El email del test se precarga en Mercado Pago para no pedirlo dos veces
+  const datos = decodificarToken(token);
+  const emailTest = datos && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(datos.email || "")) ? String(datos.email).toLowerCase() : null;
+
   const preferencia = {
+    ...(emailTest ? { payer: { email: emailTest } } : {}),
     items: [{ title: "Reporte Astrotipo: Eneagrama + Carta natal", quantity: 1, currency_id: "ARS", unit_price: PRECIO }],
     external_reference: String(token),
     // Aviso de Mercado Pago: manda el reporte por email aunque la persona no vuelva al sitio
@@ -42,7 +47,7 @@ export default async function handler(req, res) {
       console.error("Mercado Pago rechazó la preferencia:", JSON.stringify(j).slice(0, 400));
       return res.status(502).json({ error: "Mercado Pago no respondió bien" });
     }
-    return res.status(200).json({ init_point: j.init_point });
+    return res.status(200).json({ init_point: j.init_point, preference_id: j.id });
   } catch (e) {
     console.error(e);
     return res.status(500).json({ error: "Error creando el pago" });
